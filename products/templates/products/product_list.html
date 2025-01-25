@@ -1,0 +1,35 @@
+<!-- products/templates/products/product_list.html -->
+<h1>Product List</h1>
+
+<a href="{% url 'products:product_create' %}" class="btn btn-primary">Add New Product</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Product Code</th>
+            <th>Category</th>
+            <th>Model</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.product_code }}</td>
+            <td>{{ product.category.name }}</td>
+            <td>{{ product.model }}</td>
+            <td>{{ product.price }}</td>
+            <td>
+                <a href="{% url 'products:product_detail' product.pk %}">View</a> |
+                <a href="{% url 'products:product_edit' product.pk %}">Edit</a>
+            </td>
+        </tr>
+        <a href="{% url 'home' %}" class="btn btn-primary" style="margin-bottom: 20px;">
+            Back to Home
+        </a>
+        {% endfor %}
+    </tbody>
+</table>

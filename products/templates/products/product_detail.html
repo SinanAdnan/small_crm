@@ -1,0 +1,21 @@
+<!-- products/templates/products/product_detail.html -->
+<h1>{{ product.name }} {{product.model}} {{product.size}}</h1>
+<h2>{{ product.material }}</h2>
+<p><strong>Product Code:</strong> {{ product.product_code }}</p>
+<p><strong>Category:</strong> {{ product.category.name }}</p>
+<p><strong>Model:</strong> {{ product.model }}</p>
+<p><strong>Size:</strong> {{ product.size }}</p>
+<p><strong>Unit Cost:</strong> {{ product.unit_cost }}</p>
+<p><strong>Margin:</strong> {{ product.margin }}%</p>
+<p><strong>Price:</strong> {{ product.price }}</p>
+<p><strong>Material:</strong> {{ product.material }}</p>
+<p><strong>Description:</strong> {{ product.description }}</p>
+<p><strong>Warranty Information:</strong> {{ product.warranty_information }}</p>
+
+{% if product.images %}
+    <img src="{{ product.images.url }}" alt="{{ product.name }}" />
+{% endif %}
+
+{% if product.technical_specification %}
+    <a href="{{ product.technical_specification.url }}" download>Download Technical Specification</a>
+{% endif %}

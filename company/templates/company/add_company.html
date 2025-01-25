@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Company</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Add New Company</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Company Name -->
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">Company Name</label>
+                {{ form.name }}
+            </div>
+
+            <!-- Logo -->
+            <div class="form-group">
+                <label for="{{ form.logo.id_for_label }}">Logo</label>
+                {{ form.logo }}
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">Description</label>
+                {{ form.description }}
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label for="{{ form.address.id_for_label }}">Address</label>
+                {{ form.address }}
+            </div>
+
+            <!-- City -->
+            <div class="form-group">
+                <label for="{{ form.city.id_for_label }}">City</label>
+                {{ form.city }}
+            </div>
+
+            <!-- Country -->
+            <div class="form-group">
+                <label for="{{ form.country.id_for_label }}">Country</label>
+                {{ form.country }}
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="{{ form.phone.id_for_label }}">Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
+            </div>
+
+            <!-- Website -->
+            <div class="form-group">
+                <label for="{{ form.website.id_for_label }}">Website</label>
+                {{ form.website }}
+            </div>
+            <!--Classification-->
+            <div class="form-group">
+                <label for="id_classification">Classification</label>
+                <select name="classification" id="id_classification" class="form-control">
+                    <option value="High Value" {% if company.classification == "High Value" %}selected{% endif %}>High Value</option>
+                    <option value="Medium Value" {% if company.classification == "Medium Value" %}selected{% endif %}>Medium Value</option>
+                    <option value="Low Value" {% if company.classification == "Low Value" %}selected{% endif %}>Low Value</option>
+                    <option value="Unimportant" {% if company.classification == "Unimportant" %}selected{% endif %}>Unimportant</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Company</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

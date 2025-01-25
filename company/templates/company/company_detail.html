@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    body {
+      background-color: #f5f7fa;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .company-card {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .company-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .company-header h2 {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .company-details {
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+    .company-details p {
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+    .action-buttons {
+      margin-top: 20px;
+    }
+    .action-buttons .btn {
+      margin-right: 10px;
+    }
+    .back-link {
+      display: flex;
+      align-items: center;
+      color: #2c3e50;
+      text-decoration: none;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .back-link i {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>Company Details</h1>
+  </div>
+
+  <!-- Back Button -->
+  <div class="container">
+    <a href="{% url 'company:company_list' %}" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Companies
+    </a>
+
+    <!-- Company Card -->
+    <div class="company-card">
+      <!-- Company Header -->
+      <div class="company-header">
+        <div>
+          <h2>{{ company.name }}</h2>
+          {% if company.city and company.country %}
+            <p>{{ company.city }}, <img src="https://flagcdn.com/w20/{{ company.country|lower }}.png" alt="{{ company.country }} Flag" class="img-fluid" style="width: 30px; height: 20px;"></p>
+          {% endif %}
+        </div>
+        {% if company.logo %}
+          <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="height: 80px; border-radius: 8px;">
+        {% endif %}
+      </div>
+
+      <!-- Company Details -->
+      <div class="company-details">
+        <p><strong>Email:</strong> {{ company.email }}</p>
+        <p><strong>Phone:</strong> {{ company.phone }}</p>
+        {% if company.website %}
+          <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+        {% endif %}
+        <p><strong>Address:</strong> {{ company.address }}</p>
+        <div>
+            <p><strong>description:</strong></p>
+            <p> {{company.description}}
+
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="{% url 'company:edit_company' company.id %}" class="btn btn-warning">
+          <i class="fas fa-edit"></i> Edit
+        </a>
+        <a href="{% url 'company:delete_company' company.id %}" class="btn btn-danger">
+          <i class="fas fa-trash"></i> Delete
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center mt-5">
+    <p>&copy; {{ year }} Company Dashboard. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

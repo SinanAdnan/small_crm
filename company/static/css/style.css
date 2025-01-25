@@ -1,0 +1,84 @@
+body {
+    background: linear-gradient(to bottom, #f7f7f7, #e0e0e0);
+    font-family: Arial, sans-serif;
+  }
+  a {
+    color: #36454F;
+    text-decoration: none;
+    font-size: large;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  a:hover {
+    background-color: #FF7F50;
+    color: white;
+  }
+  .header {
+    background-color: #36454F;
+    color: white;
+    padding: 10px 200px;
+   
+  }
+  .header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    margin-left: 200px;
+  }
+  .sidebar {
+    background-color: #4682B4;
+    color: white;
+    height: 100vh;
+    padding: 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+  }
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .sidebar a:hover {
+    background-color: #FF7F50;
+  }
+  .main-content {
+    margin-left: 250px;
+    padding: 20px;
+  }
+  .company-table th {
+    background-color: #4682B4;
+    color: white;
+  }
+  .analytics-card {
+    background-color: #f7f7f7;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+  .btn-primary {
+    background-color: #FF7F50;
+    border: none;
+  }
+  .btn-primary:hover {
+    background-color: #FF4500;
+  }
+  .user-profile {
+    text-align: right;
+  }
+  .user-profile img {
+    width: 40px;
+    border-radius: 50%;
+  }
+  
+  .logo img {
+    width: 120px;
+    border-radius: 5px;
+  }
+  .logo a:hover{
+    background-color: #36454F;
+  }
