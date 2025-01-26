@@ -58,7 +58,7 @@ class Contact(models.Model):
         null=True
     )
     behavior = models.TextField(blank=True, null=True)  # For notes on behavior
-    social_media_links = models.JSONField(blank=True, null=True)  # To store multiple links
+    
     additional_info = models.TextField(blank=True, null=True)
 
     def __str__(self):

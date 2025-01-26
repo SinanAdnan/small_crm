@@ -24,7 +24,7 @@ class ContactForm(forms.ModelForm):
         model = Contact
         fields = ['first_name', 'second_name', 'position', 'country', 'phone', 'email' , 'image' ,
             'linkedin_profile', 'preferred_communication', 'behavior',
-            'social_media_links', 'additional_info']
+             'additional_info']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             'second_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Second Name'}),
@@ -33,7 +33,6 @@ class ContactForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
-            'social_media_links': forms.Textarea(attrs={'placeholder': 'Enter links in JSON format, e.g., {"Twitter": "url", "Facebook": "url"}'}),
             'behavior': forms.Textarea(attrs={'rows': 3}),
             'additional_info': forms.Textarea(attrs={'rows': 3}),
         }
