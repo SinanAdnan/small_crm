@@ -29,11 +29,48 @@
         <div>
           <h2>
             {{ company.name }}
-            <img 
-              src="{% static 'icons/' %}{{ company.classification|slugify }}.png" 
-              alt="{{ company.classification }}" 
-              style="width: 42px; height: 42px; margin-left: 10px;">
-              <p>{{ company.classification|slugify }}</p>
+            
+            {% if company.classification == "High Value" %}
+              <span class="text-warning">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </span>
+            {% elif company.classification == "Medium Value" %}
+              <span class="text-warning">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span class="text-secondary">
+                  <i class="far fa-star"></i>
+                </span>
+              </span>
+            {% elif company.classification == "Low Value" %}
+              <span class="text-warning">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </span>
+              <span class="text-secondary">
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              </span>
+            {% elif company.classification == "Unimportant" %}
+              <span class="text-warning">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </span>
+              <span class="text-secondary">
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              </span>
+            {% else %}
+              <span class="text-muted">No Classification</span>
+            {% endif %}
           </h2>
           {% if company.city and company.country %}
             <p>{{ company.city }}, <img src="https://flagcdn.com/w20/{{ company.country|lower }}.png" alt="{{ company.country }} Flag" class="img-fluid" style="width: 30px; height: 20px;"></p>
@@ -41,6 +78,8 @@
         </div>
         {% if company.logo %}
           <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="height: 80px; border-radius: 8px;">
+          {% else %}
+            <img src="{% static 'images/default_logo.png' %}" alt="Default Logo" style="height: 80px; border-radius: 8px;">
         {% endif %}
       </div>
 

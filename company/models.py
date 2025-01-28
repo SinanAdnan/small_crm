@@ -27,6 +27,9 @@ class Company(models.Model):
         choices=CLASSIFICATION_CHOICES,
         default='Unimportant'
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
     def __str__(self):
         return self.name
     
@@ -40,7 +43,12 @@ class Contact(models.Model):
     position = models.CharField(max_length=100, blank=True, null=True)  # Optional field
     country = CountryField(blank_label='(Select a country)', null=True, blank=True)  # Optional field
     phone = models.CharField(max_length=15)
-    email = models.EmailField()
+    email = models.EmailField(
+        unique=True,
+        error_messages={
+            'unique': "A contact with this email already exists.",
+            }
+        )
     image = models.ImageField(
         upload_to='contact_images/', 
         default='contact_images/default_user.png'
@@ -55,11 +63,14 @@ class Contact(models.Model):
             ('Messaging', 'Messaging'),
         ],
         blank=True,
-        null=True
+        null=True,
+        default='Email'
     )
     behavior = models.TextField(blank=True, null=True)  # For notes on behavior
     
     additional_info = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.first_name} {self.second_name if self.second_name else ''} {self.position if self.position else ''}"
