@@ -111,20 +111,34 @@
       <div class="contact-info">
         <h3>Contact Information</h3>
         {% if company.contacts.all %}
-          <ul>
-            {% for contact in company.contacts.all %}
-              <li>{{ contact.first_name }} {{contact.second_name}} - {{ contact.email }}</li>
-            {% endfor %}
-          </ul>
+            <ul class="list-group">
+                {% for contact in company.contacts.all %}
+                    <li class="list-group-item d-flex align-items-center">
+                        <!-- Contact Image -->
+                        {% if contact.image %}
+                            <img src="{{ contact.image.url }}" alt="{{ contact.first_name }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                        {% endif %}
+                        
+                        <div>
+                            <!-- Contact Name as a Link -->
+                            <a href="{% url 'company:contact_detail' contact.id %}" class="fw-bold text-decoration-none">
+                                {{ contact.first_name }} {{ contact.second_name }}
+                            </a>
+                            <p class="mb-0 text-muted">{{ contact.position }}</p>
+                            <p class="mb-0"><i class="fas fa-envelope"></i> {{ contact.email }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         {% else %}
-          <p>No contacts available.</p>
+            <p>No contacts available.</p>
         {% endif %}
-        <a href="{% url 'company:add_contact' company.id %}" class="btn btn-add-contact">Add Contact</a>
-      </div>
+        <a href="{% url 'company:add_contact' company.id %}" class="btn btn-primary mt-3">Add Contact</a>
     </div>
+    
 
-    <!-- Add Contact Button -->
-  </div>
   </div>
 
   <!-- Footer -->
