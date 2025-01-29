@@ -1,79 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ contact.first_name }} {{ contact.second_name }} - Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <div class="container my-5">
-        <!-- Contact Header -->
-        <div class="text-center mb-5">
-            {% if contact.image %}
-                <img src="{{ contact.image.url }}" alt="Image of {{ contact.first_name }} {{ contact.second_name }}" 
-                     class="img-fluid rounded-circle shadow" 
-                     style="width: 150px; height: 150px; object-fit: cover;">
-            {% else %}
-                <img src="{% static 'images/default_user.png' %}" alt="Default User Image" 
-                     class="img-fluid rounded-circle shadow" 
-                     style="width: 150px; height: 150px; object-fit: cover;">
-            {% endif %}
-            <h1 class="mt-3">{{ contact.first_name }} {{ contact.second_name }}</h1>
-            <h3><strong>Position:</strong> {{ contact.position }}</h3>
-        </div>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ contact.first_name }} {{ contact.second_name }} - Details
+{% endblock %}
 
-        <!-- Contact Details -->
-        <div class="row g-4 mb-5">
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">Contact Details</h5>
-                        <ul class="list-unstyled mb-0">
-                            <li><strong>Email:</strong> 
-                                <a href="mailto:{{ contact.email }}" class="text-decoration-none">{{ contact.email }}</a>
-                            </li>
-                            <li><strong>Phone:</strong> {{ contact.phone }}</li>
-                            <li>
-                                <strong>Country:</strong> 
-                            
-                                {% if contact.country %}
-                                    <img src="https://flagcdn.com/w20/{{ contact.country|lower }}.png" alt="{{ contact.country }} Flag" class="img-fluid" style="width: 30px; height: 20px;">
-                                {% endif %}
-                                {{ contact.country }}
-                            </li>
-                            <li><strong>Preferred Communication:</strong> {{ contact.preferred_communication }}</li>
-                            <li><strong>LinkedIn Profile:</strong> <a href="{{ contact.linkedin_profile }}" target="_blank">{{ contact.linkedin_profile }}</a></li>
-                            <li><strong>Behavior Notes:</strong> {{ contact.behavior }}</li>
-                            <li>
-                                <p><strong>Social Media Links:</strong></p>
-                                <ul>
-                                    {% if contact.social_media_links %}
-                                        {% for platform, url in contact.social_media_links.items %}
-                                            <li><strong>{{ platform }}:</strong> <a href="{{ url }}" target="_blank">{{ url }}</a></li>
-                                        {% endfor %}
-                                    {% else %}
-                                        <li>No links available</li>
-                                    {% endif %}
-                                </ul>
-                            </li>
-                            <li><strong>Additional Info:</strong> {{ contact.additional_info|default:"N/A" }}</li>
-                        </ul>
-                    </div>
+{% block content %}
+<div class="container my-5">
+    <!-- Contact Header -->
+    <div class="text-center mb-4">
+        {% if contact.image %}
+            <img src="{{ contact.image.url }}" alt="Image of {{ contact.first_name }} {{ contact.second_name }}" 
+                 class="img-fluid rounded-circle shadow" 
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        {% else %}
+            <img src="{% static 'images/default_user.png' %}" alt="Default User Image" 
+                 class="img-fluid rounded-circle shadow" 
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        {% endif %}
+        <h1 class="mt-3">{{ contact.first_name }} {{ contact.second_name }}</h1>
+        <h3 class="text-muted">{{ contact.position }}</h3>
+    </div>
+
+    <!-- Contact Details -->
+    <div class="row g-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"><i class="fas fa-user"></i> Contact Details</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Email:</strong> <a href="mailto:{{ contact.email }}" class="text-decoration-none">{{ contact.email }}</a></li>
+                        <li><strong>Phone:</strong> {{ contact.phone }}</li>
+                        <li><strong>Country:</strong> 
+                            {% if contact.country %}
+                                <img src="https://flagcdn.com/w20/{{ contact.country|lower }}.png" 
+                                     alt="{{ contact.country }} Flag" class="img-fluid" 
+                                     style="width: 30px; height: 20px;">
+                            {% endif %}
+                            {{ contact.country }}
+                        </li>
+                        <li><strong>Preferred Communication:</strong> {{ contact.preferred_communication }}</li>
+                        <li class="details-link">
+                            <strong>LinkedIn:</strong>
+                            {% if contact.linkedin_profile %}
+                                <a href="{{ contact.linkedin_profile }}" target="_blank" class="text-decoration-none ">
+                                    <i class="fab fa-linkedin fa-1x text-primary"></i>
+                                </a>
+                            {% else %}
+                                <span class="text-muted">Not Available</span>
+                            {% endif %}
+                        </li>
+                        <div class="mb-3">
+                            <label for="behavior_notes" class="form-label"><strong>Behavior Notes:</strong></label>
+                            <textarea id="behavior_notes" class="form-control" rows="3" readonly>{{ contact.behavior }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="additional_info" class="form-label"><strong>Additional Info:</strong></label>
+                            <textarea id="additional_info" class="form-control" rows="3" readonly>{{ contact.additional_info|default:"N/A" }}</textarea>
+                        </div>
+                    </ul>
                 </div>
             </div>
         </div>
-
-        <!-- Back to Company Details -->
-        <div class="text-center">
-            <a href="{% url 'company:company_detail' contact.company.id %}" class="btn btn-secondary">Back to {{ contact.company.name }}</a>
-        </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Edit & Delete Buttons -->
+    <div class="mt-4 text-center">
+        <a href="{% url 'company:edit_contact' contact.id %}" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Edit Contact
+        </a>
+        <button class="btn btn-danger" onclick="confirmDelete({{ contact.id }})">
+            <i class="fas fa-trash"></i> Delete Contact
+        </button>
+    </div>
+
+    <!-- Back to Company Details -->
+    <div class="text-center mt-3">
+        <a href="{% url 'company:company_detail' contact.company.id %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to {{ contact.company.name }}
+        </a>
+    </div>
+</div>
+
+<!-- Delete Confirmation Script -->
+<script>
+    function confirmDelete(contactId) {
+        if (confirm("Are you sure you want to delete this contact? This action cannot be undone!")) {
+            window.location.href = `{% url 'company:delete_contact' contact.id %}`;
+        }
+    }
+</script>
+{% endblock %}
