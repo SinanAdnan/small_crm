@@ -1,0 +1,47 @@
+<!-- products/templates/products/product_delete.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center text-danger">Delete Product</h1>
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">Are you sure you want to delete the product "{{ product.name }}"?</h5>
+            <p><strong>Model:</strong> {{ product.model }}</p>
+            <p><strong>Size:</strong> {{ product.size }}</p>
+            <p><strong>Material:</strong> {{ product.material }}</p>
+            <p><strong>Price:</strong> {{ product.price }}</p>
+
+            <!-- Button to trigger the modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                Yes, delete
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete the product "{{ product.name }}"? This action cannot be undone.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <form method="POST" id="deleteForm">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Yes, delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
