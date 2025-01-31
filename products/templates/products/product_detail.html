@@ -1,38 +1,59 @@
-<!-- products/templates/products/product_detail.html -->
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <div class="container my-5">
-    <h1 class="text-center mb-4">{{ product.name }} - {{ product.model }} - {{ product.size }}</h1>
-    
+    <!-- Product Title -->
+    <h2 class="text-center mb-4 text-uppercase font-weight-bold">
+        <i class="fas fa-cube"></i> {{ product.name }} - {{ product.model }} - {{ product.size }} - {{ product.material }}
+    </h2>
+
     <div class="row">
-        <!-- Product Image and Basic Info -->
-        <div class="col-md-4 text-center mb-4">
-            {% if product.images %}
-                <img src="{{ product.images.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow" style="max-height: 250px; object-fit: cover;">
-            {% else %}
-                <img src="{% static 'images/default_product.png' %}" alt="Default Product Image" class="img-fluid rounded shadow" style="max-height: 250px; object-fit: cover;">
-            {% endif %}
+        <!-- Product Image -->
+        <div class="col-md-4 text-center">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    {% if product.images %}
+                        <img src="{{ product.images.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow" style="max-height: 250px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default_product.png' %}" alt="Default Product Image" class="img-fluid rounded shadow" style="max-height: 250px; object-fit: cover;">
+                    {% endif %}
+                </div>
+            </div>
         </div>
 
         <!-- Product Details -->
         <div class="col-md-8">
-            <div class="card shadow">
+            <div class="card shadow-lg border-0">
                 <div class="card-body">
-                    <h5 class="card-title text-primary"><i class="fas fa-info-circle"></i> Product Details</h5>
-                    <ul class="list-unstyled">
-                        <li><strong>Material:</strong> {{ product.material }}</li>
-                        <li><strong>Product Code:</strong> {{ product.product_code }}</li>
-                        <li><strong>Category:</strong> {{ product.category.name }}</li>
-                        <li><strong>Model:</strong> {{ product.model }}</li>
-                        <li><strong>Size:</strong> {{ product.size }}</li>
-                        <li><strong>Unit Cost:</strong> {{ product.unit_cost }}</li>
-                        <li><strong>Price:</strong> {{ product.price }}</li>
-                        <li><strong>Description:</strong> {{ product.description }}</li>
-                        <li><strong>Warranty Information:</strong> {{ product.warranty_information }}</li>
-                    </ul>
+                    <h4 class="text-primary"><i class="fas fa-info-circle"></i> Product Details</h4>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Material:</strong> <span class="badge bg-dark text-white">{{ product.material }}</span></p>
+                            <p><strong>Product Code:</strong> <span class="text-muted">{{ product.product_code }}</span></p>
+                            <p><strong>Category:</strong> <span class="text-muted">{{ product.category.name }}</span></p>
+                            <p><strong>Model:</strong> <span class="text-muted">{{ product.model }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Size:</strong> <span class="badge bg-warning text-dark fs-6">{{ product.size }}</span></p>
+                            <span class="badge bg-danger mb-1 px-5 py-1 fs-6"><strong>Cost:</strong> {{ product.unit_cost|floatformat:2|intcomma }} €</span>
+                            <span class="badge bg-success mb-1 px-5 py-1 fs-6"><strong>Price:</strong> {{ product.price|floatformat:2|intcomma }} €</span>
+                            <span class="badge bg-primary mb-1 px-5 py-1 fs-6"><strong>Margin:</strong> {{ product.margin|floatformat:2 }} %</span>
+                            
+                        </div>
+                    </div>
+
+                    <hr>
+                    <h5 class="text-secondary"><i class="fas fa-align-left"></i> Description</h5>
+                    <p class="text-muted">{{ product.description }}</p>
+
+                    <h5 class="text-secondary"><i class="fas fa-shield-alt"></i> Warranty</h5>
+                    <p class="text-muted"><strong>{{ product.warranty_information }}</strong></p>
+
                     {% if product.technical_specification %}
-                        <a href="{{ product.technical_specification.url }}" download class="btn btn-primary">
+                        <a href="{{ product.technical_specification.url }}" download class="btn btn-primary mt-2">
                             <i class="fas fa-download"></i> Download Technical Specification
                         </a>
                     {% endif %}
@@ -41,31 +62,17 @@
         </div>
     </div>
 
-    <!-- Edit & Delete Buttons -->
-    <div class="mt-4 text-center">
-        <a href="{% url 'products:product_edit' product.pk %}" class="btn btn-warning">
-            <i class="fas fa-edit"></i> Edit Product
+    <!-- Action Buttons -->
+    <div class="text-center mt-4">
+        <a href="{% url 'products:product_edit' product.pk %}" class="btn btn-warning px-4">
+            <i class="fas fa-edit"></i> Edit
         </a>
-        <a href="{% url 'products:product_delete' product.id %}" class="btn btn-danger">
-            <i class="fas fa-trash"></i> Delete Product
+        <a href="{% url 'products:product_delete' product.pk %}" class="btn btn-danger px-4">
+            <i class="fas fa-trash"></i> Delete
         </a>
-    </div>
-
-    <!-- Back to Product List -->
-    <div class="text-center mt-3">
-        <a href="{% url 'products:product_list' %}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Product List
+        <a href="{% url 'products:product_list' %}" class="btn btn-secondary px-4">
+            <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
 </div>
-
-<!-- Delete Confirmation Script -->
-<script>
-    function confirmDelete(productId) {
-        if (confirm("Are you sure you want to delete this product? This action cannot be undone!")) {
-            window.location.href = `{% url 'products:product_delete' product.id %}`;
-        }
-    }
-</script>
-
 {% endblock %}

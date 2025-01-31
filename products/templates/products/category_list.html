@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-4 mb-3">Category Management</h2>
+
+    <div class="text-center mb-3">
+        <a href="{% url 'products:add_category' %}" class="btn btn-success">
+            <i class="fa fa-plus"></i> Add Category
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>
+                    <a href="{% url 'products:edit_category' category.id %}" class="btn btn-warning btn-sm">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'products:delete_category' category.id %}" class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td>
+                <a href="{% url 'products:category_list' %}" class="badge bg-primary text-white">
+                    {{ product.category.name }}
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

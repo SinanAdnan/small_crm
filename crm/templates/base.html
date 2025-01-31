@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -18,7 +19,7 @@
     <h1>{% block header %}Company Dashboard{% endblock %}</h1>
     <div class="user-profile">
       <span class="me-2">Welcome, User</span>
-      <img src="user-profile.jpg" alt="User Profile">
+      <img src="{% static 'images/user-profile.png' %}" alt="User Profile">
     </div>
   </div>
 

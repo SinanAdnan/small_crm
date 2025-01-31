@@ -2,9 +2,6 @@
 from django import forms
 from .models import Product, Category
 
-Category.objects.create(name='Electronics')
-Category.objects.create(name='Furniture')
-Category.objects.create(name='Apparel')
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -15,4 +12,10 @@ class ProductForm(forms.ModelForm):
             'material', 'description', 'warranty_information'
         ]
     
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Select Category")
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter category name'}),
+        }
