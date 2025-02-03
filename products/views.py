@@ -3,14 +3,50 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category
 from .forms import ProductForm, CategoryForm
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 def product_list(request):
-    products = Product.objects.all()
-    categories = Category.objects.all()
+    products = Product.objects.all()  # Get all products
+    
+    # Get filter parameters from request
+    search_query = request.GET.get('search', '')  # Get search query from request
+    size_filter = request.GET.get('size', '')  # Get size filter
+    material_filter = request.GET.get('material', '')  # Get material filter
+    model_filter = request.GET.get('model', '')  # Get model filter
+
+    # Apply search filter if a search term is provided
+    if search_query:
+        products = products.filter(Q(name__icontains=search_query))
+
+    # Apply additional filters
+    if size_filter:
+        products = products.filter(size__iexact=size_filter)
+    if material_filter:
+        products = products.filter(material__iexact=material_filter)
+    if model_filter:
+        products = products.filter(model__iexact=model_filter)
+
+    # Pagination (10 products per page)
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Get unique values for dropdown filters
+    sizes = Product.objects.values_list('size', flat=True).distinct()
+    materials = Product.objects.values_list('material', flat=True).distinct()
+    models = Product.objects.values_list('model', flat=True).distinct()
+
     return render(request, 'products/product_list.html', {
-        'products': products,
-        'categories': categories
-        })
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'size_filter': size_filter,
+        'material_filter': material_filter,
+        'model_filter': model_filter,
+        'sizes': sizes,
+        'materials': materials,
+        'models': models
+    })
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)

@@ -5,17 +5,59 @@
 <div class="container my-5">
     <h1 class="text-center mb-4">Product List</h1>
 
-    <!-- Add New Product Button -->
-    <div class="text-center mb-4">
-        <a href="{% url 'products:product_create' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Product
-        </a>
-    </div>
-    <div class="text-center mb-4">
-        <a href="{% url 'products:category_list' %}" class="btn btn-primary">
-            <i class="fa fa-cog"></i> Manage Categories
-        </a>
-    </div>
+    <!-- Search & Filter Form -->
+    <form method="GET" class="mb-4">
+        <div class="row g-2">
+            <!-- Search Bar -->
+            <div class="col-md-3">
+                <input type="text" name="search" class="form-control" 
+                       placeholder="Search products..." value="{{ search_query }}">
+            </div>
+
+            <!-- Size Filter -->
+            <div class="col-md-2">
+                <select name="size" class="form-select">
+                    <option value="">All Sizes</option>
+                    {% for size in sizes %}
+                        <option value="{{ size }}" {% if size == size_filter %}selected{% endif %}>
+                            {{ size }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Material Filter -->
+            <div class="col-md-2">
+                <select name="material" class="form-select">
+                    <option value="">All Materials</option>
+                    {% for material in materials %}
+                        <option value="{{ material }}" {% if material == material_filter %}selected{% endif %}>
+                            {{ material }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Model Filter -->
+            <div class="col-md-2">
+                <select name="model" class="form-select">
+                    <option value="">All Models</option>
+                    {% for model in models %}
+                        <option value="{{ model }}" {% if model == model_filter %}selected{% endif %}>
+                            {{ model }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-filter"></i> Apply Filters
+                </button>
+            </div>
+        </div>
+    </form>
 
     <!-- Products Table -->
     <div class="table-responsive">
@@ -24,22 +66,22 @@
                 <tr>
                     <th>Name</th>
                     <th>Size</th>
-                    <th>Material</th> <!-- Material column -->
+                    <th>Material</th>
                     <th>Model</th>
                     <th>Price</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for product in products %}
+                {% for product in page_obj %}
                 <tr>
                     <td>
                         <a href="{% url 'products:product_detail' product.pk %}" class="text-decoration-none">
-                            {{ product.name }}
+                            <i class="fas fa-cube fs-6"></i> {{ product.name }}
                         </a>
                     </td>
-                    <td>{{ product.size }}</td> <!-- Size column -->
-                    <td>{{ product.material }}</td> <!-- Material column -->
+                    <td>{{ product.size }}</td>
+                    <td>{{ product.material }}</td>
                     <td>{{ product.model }}</td>
                     <td>{{ product.price }}</td>
                     <td>
@@ -50,11 +92,30 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center">No products available.</td>
+                    <td colspan="6" class="text-center">No products found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination justify-content-center">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="btn btn-sm btn-outline-primary">&laquo; First</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-sm btn-outline-primary">Previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-outline-primary">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-sm btn-outline-primary">Last &raquo;</a>
+            {% endif %}
+        </span>
     </div>
 
     <!-- Back to Home Button -->
