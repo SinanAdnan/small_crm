@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Create New Offer
+{% endblock %}
+
+{% block header %}
+    Create New Offer
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Create a New Offer</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Create Offer</button>
+        </form>
+    </div>
+{% endblock %}

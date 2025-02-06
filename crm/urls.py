@@ -10,6 +10,7 @@ urlpatterns = [
      path('', TemplateView.as_view(template_name='home.html'), name='home'),  # Home page
     path('companies/', include('company.urls')),
     path('products/', include('products.urls', namespace='products')),
+    path('offers/', include('offers.urls')),
 ]
 
 if settings.DEBUG:  # Serve media files only in development

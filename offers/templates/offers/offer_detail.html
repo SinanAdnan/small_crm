@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Offer {{ offer.offer_number }} Details
+{% endblock %}
+
+{% block header %}
+    Offer {{ offer.offer_number }} - {{ offer.project_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Offer Details</h2>
+        <ul>
+            <li><strong>Offer Number:</strong> {{ offer.offer_number }}</li>
+            <li><strong>Project Name:</strong> {{ offer.project_name }}</li>
+            <li><strong>Company:</strong> {{ offer.company.name }}</li>
+            <li><strong>Products:</strong>
+                <ul>
+                    {% for product in offer.products.all %}
+                        <li>{{ product.name }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li><strong>Offer Date:</strong> {{ offer.offer_date }}</li>
+            <li><strong>Valid Until:</strong> {{ offer.valid_until }}</li>
+            <li><strong>Discount:</strong> {{ offer.discount }}%</li>
+            <li><strong>Notes:</strong> {{ offer.notes }}</li>
+        </ul>
+        <a href="{% url 'offers:list' %}" class="btn btn-secondary">Back to Offer List</a>
+    </div>
+{% endblock %}

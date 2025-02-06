@@ -16,6 +16,7 @@
             {{ form.errors }}
         </div>
         {% endif %}
+
         <!-- Product Image Section -->
         <div class="col-md-4 text-center">
             {% if form.instance.images %}
@@ -35,6 +36,7 @@
         <div class="col-md-8">
             <div class="card shadow p-4">
                 <div class="row">
+                    <!-- Product Name & Model -->
                     <div class="col-md-6">
                         <label class="form-label"><strong>Product Name</strong></label>
                         {{ form.name }}
@@ -43,6 +45,8 @@
                         <label class="form-label"><strong>Model</strong></label>
                         {{ form.model }}
                     </div>
+                    
+                    <!-- Size & Material -->
                     <div class="col-md-6">
                         <label class="form-label"><strong>Size</strong></label>
                         {{ form.size }}
@@ -51,6 +55,8 @@
                         <label class="form-label"><strong>Material</strong></label>
                         {{ form.material }}
                     </div>
+
+                    <!-- Product Code & Category -->
                     <div class="col-md-6">
                         <label class="form-label"><strong>Product Code</strong></label>
                         {{ form.product_code }}
@@ -59,6 +65,8 @@
                         <label class="form-label"><strong>Category</strong></label>
                         {{ form.category }}
                     </div>
+
+                    <!-- Unit Cost, Margin & Price -->
                     <div class="col-md-6">
                         <label class="form-label"><strong>Unit Cost</strong></label>
                         {{ form.unit_cost }}
@@ -71,9 +79,11 @@
                         <label class="form-label"><strong>Price</strong></label>
                         {{ form.price }}
                     </div>
+
+                    <!-- Description, Warranty & Technical Specification -->
                     <div class="col-md-12">
                         <label class="form-label"><strong>Description</strong></label>
-                        {{ form.description }}
+                        {{ form.description}}
                     </div>
                     <div class="col-md-12">
                         <label class="form-label"><strong>Warranty Information</strong></label>
@@ -81,17 +91,23 @@
                     </div>
                     <div class="col-md-12">
                         <label class="form-label"><strong>Technical Specification</strong></label>
-                        {{ form.technical_specification }}
+                        {{ form.technical_specification}}
+                    </div>
+
+                    <!-- Estimated Production Time -->
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Estimated Production Time (Weeks)</strong></label>
+                        {{ form.production_time}}
                     </div>
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-success btn-lg">
                         <i class="fas fa-save"></i> Save Product
                     </button>
                     <a href="{% if form.instance.pk %}{% url 'products:product_detail' form.instance.pk %}{% else %}{% url 'products:product_list' %}{% endif %}" 
-                            class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Cancel
+                       class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> Cancel
                     </a>
                 </div>
             </div>

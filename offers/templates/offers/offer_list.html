@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Offer List
+{% endblock %}
+
+{% block header %}
+    Offer List
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">List of Offers</h2>
+        <a href="{% url 'offers:create' %}" class="btn btn-primary mb-3">
+            <i class="fas fa-plus"></i> New Offer
+        </a>
+        {% if offers %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Offer Number</th>
+                        <th>Project Name</th>
+                        <th>Company</th>
+                        <th>Products</th>
+                        <th>Offer Date</th>
+                        <th>Valid Until</th>
+                        <th>Discount</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer in offers %}
+                        <tr>
+                            <td>{{ offer.offer_number }}</td>
+                            <td><a href="{% url 'offers:detail' offer.pk %}">
+                                <i class="fas fa-file-invoice-dollar"></i> {{ offer.project_name }}</a>
+                            </td>
+                            <td>
+                                 {{ offer.company.name }}
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for product in offer.products.all %}
+                                        <li>{{ product.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{ offer.offer_date }}</td>
+                            <td>{{ offer.valid_until }}</td>
+                            <td>{{ offer.discount }}%</td>
+                            <td>{{ offer.notes }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No offers available.</p>
+        {% endif %}
+    </div>
+{% endblock %}

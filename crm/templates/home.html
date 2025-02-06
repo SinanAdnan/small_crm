@@ -6,53 +6,7 @@
     <title>CRM Home</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     {% load static %}
-    <style>
-        /* Custom Styling */
-        body {
-            background-color: #F5F5F5;
-            font-family: 'Roboto', sans-serif;
-        }
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('https://o-ring.info/catalog/categories/heavy-industry/eriks_heavy-industry-steel_1534775280.jpg') no-repeat center center;
-            background-size: cover;
-            color: #FFFFFF;
-            text-align: center;
-            padding: 100px 20px;
-        }
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .hero p {
-            font-size: 1.5rem;
-        }
-        .btn-custom {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-        }
-        .btn-custom:hover {
-            background-color: #0056b3;
-        }
-        .card img {
-            height: 200px;
-            object-fit: cover;
-        }
-        .footer {
-            background-color: #3B3F42;
-            color: #FFFFFF;
-            padding: 20px 0;
-        }
-        .footer a {
-            color: #FF8C00;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=1">
 </head>
 <body>
 
@@ -69,7 +23,7 @@
         <div class="row text-center">
             <div class="col-md-4">
                 <div class="card shadow-sm">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/M%C3%BCnster%2C_LVM%2C_B%C3%BCrogeb%C3%A4ude_--_2013_--_5149-51.jpg" class="card-img-top" alt="Feature 1">
+                    <img src="{% static 'images/599.jpg'%}" class="card-img-top" alt="Feature 1">
                     <div class="card-body">
                         <h5 class="card-title">Manage Companies</h5>
                         <p class="card-text">Keep track of your clients and partners with ease.</p>
@@ -79,21 +33,21 @@
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm">
-                    <img src="https://www.shalviengineering.com/images/mechanical-products.jpg" class="card-img-top" alt="Feature 2">
+                    <img src="{% static 'images/577.jpg'%}" class="card-img-top" alt="Feature 2">
                     <div class="card-body">
                         <h5 class="card-title">Track Products</h5>
-                        <p class="card-text">Organize and manage your product portfolio effortlessly.</p>
+                        <p class="card-text">Manage your product portfolio effortlessly.</p>
                         <a href="{% url 'products:product_list' %}" class="btn btn-custom">Learn More</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm">
-                    <img src="https://prod.rockmedialibrary.com/api/public/content/7c8f38155b324a19b255fb61bd99be06?v=a242c4f9" class="card-img-top" alt="Feature 3">
+                    <img src="{% static 'images/581.jpg'%}" class="card-img-top" alt="Feature 3">
                     <div class="card-body">
                         <h5 class="card-title">Generate Offers</h5>
                         <p class="card-text">Create professional proposals tailored to your clients.</p>
-                        <a href="#" class="btn btn-custom">Learn More</a>
+                        <a href="{% url 'offers:list' %}" class="btn btn-custom">Learn More</a> <!-- Updated Button -->
                     </div>
                 </div>
             </div>
@@ -101,7 +55,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer text-center">
+    <footer class="footer">
         <p>© 2025 MMS. All rights reserved.</p>
         <p>
             <a href="#">Privacy Policy</a> | <a href="#">Contact Us</a>

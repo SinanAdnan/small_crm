@@ -56,10 +56,16 @@ def product_create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)  # Save but don't commit to the database yet
+            
+            # Ensure product_code is uppercase (redundant, but keeps code cleaner)
+            product.product_code = product.product_code.upper()
+            
+            product.save()  # Now save to the database
             return redirect('products:product_list')
     else:
         form = ProductForm()
+    
     return render(request, 'products/product_form.html', {'form': form})
 
 def product_edit(request, pk):

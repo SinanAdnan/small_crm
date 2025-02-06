@@ -50,7 +50,8 @@
     </form>
 
     <!-- Company List Table -->
-    <a href="{% url 'company:add_company' %}" class="btn btn-primary mt-3 mb-3">Add New Company</a>
+    <a href="{% url 'company:add_company' %}" class="btn btn-primary mt-3 mb-3">
+      <i class="fas fa-plus"></i> New Company</a>
     <div class="table-responsive">
       <table class="table company-table table-striped">
         <thead>
@@ -66,7 +67,8 @@
           {% for company in companies %}
             <tr>
               <td>{{ forloop.counter }}</td>
-              <td><a href="{% url 'company:company_detail' company.id %}">{{ company.name }}</a></td>
+              <td><a href="{% url 'company:company_detail' company.id %}">
+                <i class="fas fa-industry me-3 fs-3"> </i> {{ company.name }}</a></td>
               <td>
                 {% if company.country %}
                   <img src="https://flagcdn.com/w20/{{ company.country|lower }}.png" alt="{{ company.country }} Flag" class="img-fluid" style="width: 30px; height: 20px;">

@@ -1,0 +1,240 @@
+/* ==============================
+   Global Styles
+   ============================== */
+   body {
+    background: linear-gradient(to bottom, #f7f7f7, #e0e0e0);
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+/* Links Styling */
+a {
+    color: #36454F;
+    text-decoration: none;
+    font-size: large;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+a:hover {
+    color: #FF7F50;
+}
+
+/* ==============================
+    Home page 
+   ============================== */
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('https://o-ring.info/catalog/categories/heavy-industry/eriks_heavy-industry-steel_1534775280.jpg') no-repeat center center;
+    background-size: cover;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.hero p {
+    font-size: 1.5rem;
+}
+
+/* Custom Buttons */
+.btn-custom {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+}
+
+/* Card Image Styling */
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+/* ==============================
+   Header Section
+   ============================== */
+.header {
+    background-color: #36454F;
+    color: white;
+    padding: 10px 200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px; /* Set a fixed height */
+}
+.header img {
+    max-height: 60px; /* Adjust this value as needed */
+    width: auto;
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    margin: 0 200px;
+}
+
+/* ==============================
+   Sidebar Navigation
+   ============================== */
+.sidebar {
+    background-color: #4682B4;
+    color: white;
+    height: 100vh;
+    padding: 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+}
+
+.sidebar a {
+    color: white;
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar a:hover {
+    background-color: #FF7F50;
+}
+
+/* ==============================
+   Main Content Area
+   ============================== */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.company-table th {
+    background-color: #4682B4;
+    color: white;
+}
+
+/* ==============================
+   Analytics & Company Cards
+   ============================== */
+.analytics-card, .company-card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.company-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.company-header h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.company-details {
+    margin-top: 20px;
+    line-height: 1.6;
+}
+
+.company-details p {
+    font-size: 16px;
+    margin: 0 0 10px;
+}
+
+/* ==============================
+   Buttons Styling
+   ============================== */
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #FF7F50;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #FF4500;
+}
+
+.btn-add-contact {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-add-contact:hover {
+    background-color: #0056b3;
+}
+
+.btn-add-contact:active {
+    background-color: #004085;
+}
+
+/* ==============================
+   Footer Styling (Always at Bottom)
+   ============================== */
+.footer {
+    background-color: #3B3F42;
+    color: #FFFFFF;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer a {
+    color: #FF7F50; /* Matches hover effect */
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* ==============================
+   Responsive Design
+   ============================== */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .contact-info h3 {
+        font-size: 16px;
+    }
+    .contact-info ul li {
+        font-size: 14px;
+    }
+    .btn-add-contact {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}

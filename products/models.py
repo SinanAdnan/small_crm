@@ -22,6 +22,7 @@ class Product(models.Model):
     material = models.CharField(max_length=200)
     description = models.TextField()
     warranty_information = models.TextField()
+    production_time = models.PositiveIntegerField(help_text="Estimated production time in Weeks")
 
     def save(self, *args, **kwargs):
         if self.product_code:

@@ -9,7 +9,7 @@ class ProductForm(forms.ModelForm):
         fields = [
             'name', 'product_code', 'category', 'model', 'size', 
             'unit_cost', 'margin', 'images', 'technical_specification', 
-            'material', 'description', 'warranty_information'
+            'material', 'description', 'warranty_information', 'production_time'
         ]
     
 class CategoryForm(forms.ModelForm):
