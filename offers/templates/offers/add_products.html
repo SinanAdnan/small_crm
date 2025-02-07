@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add Products to Offer {{ offer.offer_number }}
+{% endblock %}
+
+{% block header %}
+    Add Products to Offer {{ offer.offer_number }} - {{ offer.project_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Add Products to Offer</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Product</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,31 +1,26 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Offer {{ offer.offer_number }} Details
+    Offer Details
 {% endblock %}
 
 {% block header %}
-    Offer {{ offer.offer_number }} - {{ offer.project_name }}
+    Offer Details
 {% endblock %}
 
 {% block content %}
     <div class="container mt-5">
         <h2 class="mb-4">Offer Details</h2>
         <ul>
-            <li><strong>Offer Number:</strong> {{ offer.offer_number }}</li>
+            <li><strong>Company Name:</strong> {{ offer.company.name }}</li>
+            <li><strong>Company Address:</strong> {{ offer.company.address }}</li>
+            <li><strong>Company Country:</strong> {{ offer.company.country }}</li>
+            <li><strong>Contact Person Full Name:</strong> {{ offer.contact_person.first_name }} {{ offer.contact_person.second_name }}</li>
+            <li><strong>Contact Person Email:</strong> {{ offer.contact_person.email }}</li>
             <li><strong>Project Name:</strong> {{ offer.project_name }}</li>
-            <li><strong>Company:</strong> {{ offer.company.name }}</li>
-            <li><strong>Products:</strong>
-                <ul>
-                    {% for product in offer.products.all %}
-                        <li>{{ product.name }}</li>
-                    {% endfor %}
-                </ul>
-            </li>
+            <li><strong>Project Country:</strong> {{ offer.project_country }}</li>
             <li><strong>Offer Date:</strong> {{ offer.offer_date }}</li>
             <li><strong>Valid Until:</strong> {{ offer.valid_until }}</li>
-            <li><strong>Discount:</strong> {{ offer.discount }}%</li>
-            <li><strong>Notes:</strong> {{ offer.notes }}</li>
         </ul>
         <a href="{% url 'offers:list' %}" class="btn btn-secondary">Back to Offer List</a>
     </div>

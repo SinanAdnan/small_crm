@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.offer_list, name='list'),
     path('create/', views.create_offer, name='create'),
     path('<int:pk>/', views.offer_detail, name='detail'),
+    path('initialize_counter/', views.initialize_counter, name='initialize_counter'),
 ]
