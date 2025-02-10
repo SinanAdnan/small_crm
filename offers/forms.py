@@ -9,6 +9,7 @@ class OfferForm(forms.ModelForm):
             'company', 'project_name','contact_person', 'project_country', 'offer_date', 'valid_until'
         ]
         widgets = {
+            'country': forms.Select(attrs={'class': 'form-control'}),
             'offer_date': forms.DateInput(attrs={'type': 'date'}),
             'valid_until': forms.DateInput(attrs={'type': 'date'}),
         }

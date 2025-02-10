@@ -1,27 +1,68 @@
-{% extends "base.html" %}
-
-{% block title %}
-    Offer Details
-{% endblock %}
-
-{% block header %}
-    Offer Details
-{% endblock %}
-
+{% extends 'base.html' %}
+{% load static %}
 {% block content %}
-    <div class="container mt-5">
-        <h2 class="mb-4">Offer Details</h2>
-        <ul>
-            <li><strong>Company Name:</strong> {{ offer.company.name }}</li>
-            <li><strong>Company Address:</strong> {{ offer.company.address }}</li>
-            <li><strong>Company Country:</strong> {{ offer.company.country }}</li>
-            <li><strong>Contact Person Full Name:</strong> {{ offer.contact_person.first_name }} {{ offer.contact_person.second_name }}</li>
-            <li><strong>Contact Person Email:</strong> {{ offer.contact_person.email }}</li>
-            <li><strong>Project Name:</strong> {{ offer.project_name }}</li>
-            <li><strong>Project Country:</strong> {{ offer.project_country }}</li>
-            <li><strong>Offer Date:</strong> {{ offer.offer_date }}</li>
-            <li><strong>Valid Until:</strong> {{ offer.valid_until }}</li>
-        </ul>
-        <a href="{% url 'offers:list' %}" class="btn btn-secondary">Back to Offer List</a>
+<div class="container my-5">
+    <!-- Offer Title -->
+    <h2 class="text-center mb-4 text-uppercase font-weight-bold">
+        <i class="fas fa-file-alt"></i> Offer {{ offer.offer_number }} - {{ offer.project_name }}
+    </h2>
+
+    <div class="row">
+        <!-- Company and Contact Person Details -->
+        <div class="col-md-12">
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-body">
+                    <h4 class="text-primary"><i class="fas fa-info-circle"></i> Company & Contact Details</h4>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Company Name:</strong> <span class="text-muted">{{ offer.company.name }}</span></p>
+                            <p><strong>Company Address:</strong> <span class="text-muted">{{ offer.company.address }}</span></p>
+                            <p><strong>Company Country:</strong> <span class="text-muted">{{ offer.company.country }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-user"></i></strong> <span class="text-muted">{{ offer.contact_person.first_name }} {{ offer.contact_person.second_name }}</span></p>
+                            <p><strong><i class="fas fa-envelope"></i></strong> <span class="text-muted">{{ offer.contact_person.email }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Details -->
+        <div class="col-md-12">
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-body">
+                    <h4 class="text-primary"><i class="fas fa-project-diagram"></i> Project Details</h4>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Project Name:</strong> <span class="text-muted">{{ offer.project_name }}</span></p>
+                            <p><strong>Project Country:</strong> <span class="text-muted">{{ offer.project_country }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Offer Date:</strong> <span class="text-muted">{{ offer.offer_date }}</span></p>
+                            <p><strong>Valid Until:</strong> <span class="text-muted">{{ offer.valid_until }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Action Buttons -->
+    <div class="text-center mt-4">
+        <a href="{% url 'offers:list' %}" class="btn btn-secondary px-4">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+        <a href="#" class="btn btn-warning px-4">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a href="#" class="btn btn-danger px-4">
+            <i class="fas fa-trash"></i> Delete
+        </a>
+    </div>
+</div>
 {% endblock %}

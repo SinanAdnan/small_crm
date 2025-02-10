@@ -1,6 +1,6 @@
 from django.db import models
 from company.models import Company, Contact
-
+from django_countries.fields import CountryField
 
 class OfferCounter(models.Model):
     base_number = models.PositiveIntegerField(default=11000)
@@ -22,7 +22,7 @@ class Offer(models.Model):
     valid_until = models.DateField()
     notes = models.TextField(blank=True, null=True)
     project_name = models.CharField(max_length=255)
-    project_country = models.CharField(max_length=100)
+    project_country = CountryField(blank_label='(Select a country)', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.pk:
