@@ -18,3 +18,27 @@
         </form>
     </div>
 {% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#id_company').change(function () {
+            var url = "{% url 'offers:load_contacts' %}";
+            var companyId = $(this).val();
+            $.ajax({
+                url: url,
+                data: {
+                    'company_id': companyId
+                },
+                success: function (data) {
+                    $('#id_contact_person').html('<option value="">---------</option>');
+                    data.forEach(function (contact) {
+                        $('#id_contact_person').append('<option value="' + contact.id + '">' + contact.first_name + ' ' + (contact.second_name ? contact.second_name : '') + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

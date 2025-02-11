@@ -19,7 +19,7 @@
                         <div class="col-md-6">
                             <p><strong>Company Name:</strong> <span class="text-muted">{{ offer.company.name }}</span></p>
                             <p><strong>Company Address:</strong> <span class="text-muted">{{ offer.company.address }}</span></p>
-                            <p><strong>Company Country:</strong> <span class="text-muted">{{ offer.company.country }}</span></p>
+                            <p><strong>Company Country:<img src="https://flagcdn.com/w20/{{ offer.company.country|lower }}.png" alt="{{ offer.company.country.name }} Flag" class="img-fluid" style="width: 30px; height: 20px;"> </strong> <span class="text-muted">{{ offer.company.country.name }}</span></p>
                         </div>
                         <div class="col-md-6">
                             <p><strong><i class="fas fa-user"></i></strong> <span class="text-muted">{{ offer.contact_person.first_name }} {{ offer.contact_person.second_name }}</span></p>
@@ -36,7 +36,41 @@
                 <div class="card-body">
                     <h4 class="text-primary"><i class="fas fa-project-diagram"></i> Project Details</h4>
                     <hr>
-
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Project Name:</strong> <span class="text-muted">{{ offer.project_name }}</span></p>
+                            <p><strong>Project Country: <img src="https://flagcdn.com/w20/{{ offer.project_country|lower }}.png" alt="{{ offer.project_country.name }} Flag" class="img-fluid" style="width: 30px; height: 20px;"></strong> <span class="text-muted">{{ offer.project_country.name }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Project Details -->
+        <div class="col-md-12">
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-body">
+                    <h4 class="text-primary"><i class="fas fa-info-circle"></i> Offer Details </h4>
+                    <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Offer Date:</strong> <span class="text-muted">{{ offer.offer_date }}</span></p>
+                                <p><strong>Valid Until:</strong> <span class="text-muted">{{ offer.valid_until }}</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="fas fa-ship"></i><strong> Delivery Method</strong> <span class="text-muted">{{ offer.delivery_method }}</span></p>
+                                <p><i class="fas fa-file-invoice-dollar"></i><strong> Payment Terms</strong> <span class="text-muted">{{ offer.payment_terms }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Project Details -->
+        <div class="col-md-12">
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-body">
+                    <h4 class="text-primary"><i class="fas fa-box"></i> Products </h4>
+                    <hr>
                     <div class="row">
                         <div class="col-md-6">
                             <p><strong>Project Name:</strong> <span class="text-muted">{{ offer.project_name }}</span></p>

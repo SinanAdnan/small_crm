@@ -2,10 +2,7 @@ from django.db import models
 from django_countries.fields import CountryField
 from django.urls import reverse
 
-
 class Company(models.Model):
-
-    
     CLASSIFICATION_CHOICES = [
         ('High Value', 'High Value'),
         ('Medium Value', 'Medium Value'),
@@ -39,20 +36,20 @@ class Company(models.Model):
 class Contact(models.Model):
     company = models.ForeignKey('Company', related_name='contacts', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
-    second_name = models.CharField(max_length=100, blank=True, null=True)  # Optional field
-    position = models.CharField(max_length=100, blank=True, null=True)  # Optional field
-    country = CountryField(blank_label='(Select a country)', null=True, blank=True)  # Optional field
+    second_name = models.CharField(max_length=100, blank=True, null=True)
+    position = models.CharField(max_length=100, blank=True, null=True)
+    country = CountryField(blank_label='(Select a country)', null=True, blank=True)
     phone = models.CharField(max_length=15)
     email = models.EmailField(
         unique=True,
         error_messages={
             'unique': "A contact with this email already exists.",
-            }
-        )
+        }
+    )
     image = models.ImageField(
         upload_to='contact_images/', 
         default='contact_images/default_user.png'
-        )
+    )
     linkedin_profile = models.URLField(max_length=200, blank=True, null=True)
     preferred_communication = models.CharField(
         max_length=50,
@@ -66,8 +63,7 @@ class Contact(models.Model):
         null=True,
         default='Email'
     )
-    behavior = models.TextField(blank=True, null=True)  # For notes on behavior
-    
+    behavior = models.TextField(blank=True, null=True)
     additional_info = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
