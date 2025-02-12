@@ -125,3 +125,20 @@ def delete_category(request, pk):
         messages.success(request, 'Category deleted successfully!')
         return redirect('products:category_list')
     return render(request, 'products/category_confirm_delete.html', {'category': category})
+
+from django.http import JsonResponse
+from .models import Product
+
+def product_detail_api(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    data = {
+        'product_code': product.product_code,
+        'name': product.name,
+        'size': product.size,
+        'material': product.material,
+        'unit_cost': product.unit_cost,
+        'margin': product.margin,
+        'price': product.price,
+        'description': product.description,
+    }
+    return JsonResponse(data)

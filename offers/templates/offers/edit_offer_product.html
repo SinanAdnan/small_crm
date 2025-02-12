@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4 text-uppercase font-weight-bold">
+        <i class="fas fa-edit"></i> Edit Product in Offer {{ offer.offer_number }}
+    </h2>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Update Product</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function calculatePrice(unitCost, margin, discount) {
+    const basePrice = parseFloat(unitCost) / (1 - (parseFloat(margin) / 100));
+    const finalPrice = basePrice * (1 - (parseFloat(discount) / 100));
+    return finalPrice.toFixed(2);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const unitCostInput = document.getElementById('id_unit_cost');
+    const marginInput = document.getElementById('id_margin');
+    const discountInput = document.getElementById('id_discount_percentage');
+    const priceInput = document.getElementById('id_price');
+
+    function updatePrice() {
+        const unitCost = parseFloat(unitCostInput.value) || 0;
+        const margin = parseFloat(marginInput.value) || 0;
+        const discount = parseFloat(discountInput.value) || 0;
+        priceInput.value = calculatePrice(unitCost, margin, discount);
+    }
+
+    unitCostInput.addEventListener('input', updatePrice);
+    marginInput.addEventListener('input', updatePrice);
+    discountInput.addEventListener('input', updatePrice);
+});
+</script>
+{% endblock %}

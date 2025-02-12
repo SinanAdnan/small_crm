@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+Offer Stages
+{% endblock %}
+
+{% block header %}
+Offer Stages
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Offer Stages</h2>
+        <div class="row">
+            {% for stage, offers in offers_by_stage.items %}
+            <div class="col-md-3">
+                <div class="offer-stage-column">
+                    <h4 class="text-white bg-offer-stage-green p-2 text-center">{{ stage }}</h4>
+                    <div class="offer-stage-list">
+                        {% for offer in offers %}
+                        <div class="offer-stage-card mb-3 shadow-sm">
+                            <div class="offer-stage-card-body">
+                                <h5 class="offer-stage-card-title">
+                                    <a href="{% url 'offers:offer_detail' offer.pk %}" class="text-decoration-none">{{ offer.project_name }}</a>
+                                </h5>
+                                <p class="offer-stage-card-text">{{ offer.company.name }}</p>
+                                <p class="offer-stage-card-text">
+                                    <img src="https://flagcdn.com/w20/{{ offer.project_country.code|lower }}.png" alt="{{ offer.project_country.name }} Flag" class="img-fluid" style="width: 20px; height: 15px;">
+                                    {{ offer.project_country.name }}
+                                </p>
+                                <p class="offer-stage-card-text">
+                                    <strong><i class="fas fa-euro-sign"></i></strong> {{ offer.total_amount|floatformat:2|intcomma }} 
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

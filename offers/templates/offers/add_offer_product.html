@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4 text-uppercase font-weight-bold">
+        <i class="fas fa-plus"></i> Add Product to Offer {{ offer.offer_number }}
+    </h2>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_product">Product</label>
+                    <select name="product" id="id_product" class="form-control" onchange="fetchProductData(this.value)">
+                        <option value="">Select a product</option>
+                        {% for product in form.fields.product.queryset %}
+                        <option value="{{ product.id }}">{{ product.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function fetchProductData(productId) {
+    if (productId) {
+        fetch(`/products/api/product/${productId}/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('id_product_code').value = data.product_code;
+                document.getElementById('id_product_name').value = data.name;
+                document.getElementById('id_size').value = data.size;
+                document.getElementById('id_material').value = data.material;
+                document.getElementById('id_unit_cost').value = data.unit_cost;
+                document.getElementById('id_margin').value = data.margin;
+                document.getElementById('id_discount_percentage').value = data.discount_percentage || 0;
+                document.getElementById('id_price').value = calculatePrice(data.unit_cost, data.margin, data.discount_percentage || 0);
+                document.getElementById('id_description').value = data.description;
+            });
+    }
+}
+
+function calculatePrice(unitCost, margin, discount) {
+    const basePrice = parseFloat(unitCost) / (1 - (parseFloat(margin) / 100));
+    const finalPrice = basePrice * (1 - (parseFloat(discount) / 100));
+    return finalPrice.toFixed(2);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const unitCostInput = document.getElementById('id_unit_cost');
+    const marginInput = document.getElementById('id_margin');
+    const discountInput = document.getElementById('id_discount_percentage');
+    const priceInput = document.getElementById('id_price');
+
+    function updatePrice() {
+        const unitCost = parseFloat(unitCostInput.value) || 0;
+        const margin = parseFloat(marginInput.value) || 0;
+        const discount = parseFloat(discountInput.value) || 0;
+        priceInput.value = calculatePrice(unitCost, margin, discount);
+    }
+
+    unitCostInput.addEventListener('input', updatePrice);
+    marginInput.addEventListener('input', updatePrice);
+    discountInput.addEventListener('input', updatePrice);
+});
+</script>
+{% endblock %}
