@@ -129,3 +129,21 @@ def delete_offer_product(request, offer_id, offer_product_id):
         offer_product.delete()
         return redirect('offers:offer_detail', pk=offer.pk)
     return render(request, 'offers/delete_offer_product.html', {'offer_product': offer_product, 'offer': offer})
+
+def edit_offer(request, pk):
+    offer = get_object_or_404(Offer, pk=pk)
+    if request.method == 'POST':
+        form = OfferForm(request.POST, instance=offer)
+        if form.is_valid():
+            form.save()
+            return redirect('offers:offer_detail', pk=pk)
+    else:
+        form = OfferForm(instance=offer)
+    return render(request, 'offers/edit_offer.html', {'form': form, 'offer': offer})
+
+def delete_offer(request, pk):
+    offer = get_object_or_404(Offer, pk=pk)
+    if request.method == 'POST':
+        offer.delete()
+        return redirect('offers:list')
+    return render(request, 'offers/delete_offer.html', {'offer': offer})

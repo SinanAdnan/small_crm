@@ -24,15 +24,18 @@ Offer Stages
                         <div class="offer-stage-card mb-3 shadow-sm">
                             <div class="offer-stage-card-body">
                                 <h5 class="offer-stage-card-title">
-                                    <a href="{% url 'offers:offer_detail' offer.pk %}" class="text-decoration-none">{{ offer.project_name }}</a>
+                                    <a href="{% url 'offers:offer_detail' offer.pk %}" class="text-decoration-none">{{ offer.offer_number }} - {{ offer.project_name }} </a> 
                                 </h5>
                                 <p class="offer-stage-card-text">{{ offer.company.name }}</p>
                                 <p class="offer-stage-card-text">
                                     <img src="https://flagcdn.com/w20/{{ offer.project_country.code|lower }}.png" alt="{{ offer.project_country.name }} Flag" class="img-fluid" style="width: 20px; height: 15px;">
-                                    {{ offer.project_country.name }}
+                                    {{ offer.project_country.name }} - {{ offer.offer_date|date:"M Y" }}
                                 </p>
                                 <p class="offer-stage-card-text">
-                                    <strong><i class="fas fa-euro-sign"></i></strong> {{ offer.total_amount|floatformat:2|intcomma }} 
+                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6"><strong><i class="fas fa-euro-sign"></i></strong> {{ offer.total_amount|floatformat:2|intcomma }} </span>
+                                </p>
+                                <p class="offer-stage-card-text">
+                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6"><strong><i class="fas fa-box"></i></strong> {{ offer.category }} </span>
                                 </p>
                             </div>
                         </div>

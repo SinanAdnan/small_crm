@@ -1,7 +1,7 @@
 from django.db import models
 from company.models import Company, Contact
 from django_countries.fields import CountryField
-from products.models import Product
+from products.models import Product, Category
 
 class DeliveryMethod(models.Model):
     name = models.CharField(max_length=255)
@@ -79,7 +79,8 @@ class Offer(models.Model):
     project_country = CountryField(blank_label='(Select a country)', null=True, blank=True)
     payment_terms = models.TextField(blank=True, null=True)
     delivery_time_weeks = models.PositiveIntegerField(null=True, blank=True)
-    stage = models.ForeignKey(Stage, on_delete=models.SET_NULL, null=True, blank=True) 
+    stage = models.ForeignKey(Stage, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE) 
 
     def save(self, *args, **kwargs):
         if not self.pk:

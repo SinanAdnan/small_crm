@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="container my-5">
+    <!-- Offer Title -->
+    <h2 class="text-center mb-4 text-uppercase font-weight-bold">
+        <i class="fas fa-edit"></i> Edit Offer {{ offer.offer_number }} - {{ offer.project_name }}
+    </h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <!-- Company and Contact Person Details -->
+            <div class="col-md-12">
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body">
+                        <h4 class="text-primary"><i class="fas fa-info-circle"></i> Company & Contact Details</h4>
+                        <hr>
+                        <div class="form-group">
+                            {{ form.company.label_tag }}
+                            {{ form.company }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.contact_person.label_tag }}
+                            {{ form.contact_person }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Details -->
+            <div class="col-md-12">
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body">
+                        <h4 class="text-primary"><i class="fas fa-project-diagram"></i> Project Details</h4>
+                        <hr>
+                        <div class="form-group">
+                            {{ form.project_name.label_tag }}
+                            {{ form.project_name }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.project_country.label_tag }}
+                            {{ form.project_country }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offer Details -->
+            <div class="col-md-12">
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body">
+                        <h4 class="text-primary"><i class="fas fa-info-circle"></i> Offer Details</h4>
+                        <hr>
+                        <div class="form-group">
+                            {{ form.offer_date.label_tag }}
+                            {{ form.offer_date }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.valid_until.label_tag }}
+                            {{ form.valid_until }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.delivery_method.label_tag }}
+                            {{ form.delivery_method }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.payment_terms.label_tag }}
+                            {{ form.payment_terms }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.delivery_time_weeks.label_tag }}
+                            {{ form.delivery_time_weeks }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.stage.label_tag }}
+                            {{ form.stage }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-12 text-center mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{% url 'offers:offer_detail' offer.pk %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

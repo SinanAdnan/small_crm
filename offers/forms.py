@@ -1,13 +1,26 @@
 from django import forms
 from .models import Offer, DeliveryMethod, Stage, OfferProduct
 from company.models import Contact
-from products.models import Product
+from products.models import Product, Category
 
 class OfferForm(forms.ModelForm):
+
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True, label='Category')
+
     class Meta:
         model = Offer
         fields = [
-            'company', 'project_name', 'contact_person', 'project_country', 'offer_date', 'valid_until', 'delivery_method', 'payment_terms', 'delivery_time_weeks', 'stage'
+            'company', 
+            'project_name', 
+            'contact_person', 
+            'project_country', 
+            'offer_date', 
+            'valid_until', 
+            'delivery_method', 
+            'payment_terms', 
+            'delivery_time_weeks', 
+            'stage',
+            'category'
         ]
         widgets = {
             'project_country': forms.Select(attrs={'class': 'form-control', 'autocomplete': 'country'}),
