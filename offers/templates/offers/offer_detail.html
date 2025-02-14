@@ -57,6 +57,7 @@
                             <p><strong>Offer Date:</strong> <span class="text-muted">{{ offer.offer_date }}</span></p>
                             <p><strong>Valid Until:</strong> <span class="text-muted">{{ offer.valid_until }}</span></p>
                             <p><strong>Total Value:</strong> <span class="text-muted">{{ total_amount |floatformat:2|intcomma }} €</span></p>
+                            <p><strong>Category: </strong> <span class="text-muted">{{ offer.category }}</span></p>
                         </div>
                         <div class="col-md-6">
                             <p><i class="fas fa-ship"></i><strong> Delivery Method:</strong> <span class="text-muted">{{ offer.delivery_method }}</span></p>

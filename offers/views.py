@@ -93,7 +93,18 @@ def offer_stage(request):
     stages = Stage.objects.all()
     if not stages.exists():
         stages = ['Offers']
-    offers_by_stage = {stage.name if isinstance(stage, Stage) else stage: Offer.objects.filter(stage=stage) for stage in stages}
+    
+    offers_by_stage = {}
+    for stage in stages:
+        stage_name = stage.name if isinstance(stage, Stage) else stage
+        offers = Offer.objects.filter(stage=stage)
+        total_amount = sum(offer.total_amount for offer in offers)
+        offers_by_stage[stage_name] = {
+            'offers': offers,
+            'number_of_offers': offers.count(),
+            'total_amount': total_amount,
+        }
+    
     return render(request, 'offers/offer_stage.html', {'offers_by_stage': offers_by_stage})
 
 def add_offer_product(request, offer_id):

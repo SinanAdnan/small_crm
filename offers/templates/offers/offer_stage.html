@@ -9,22 +9,30 @@ Offer Stages
 Offer Stages
 {% endblock %}
 
-
-
 {% block content %}
     <div class="container mt-5">
         <h2 class="mb-4">Offer Stages</h2>
         <div class="row">
-            {% for stage, offers in offers_by_stage.items %}
+            {% for stage, data in offers_by_stage.items %}
             <div class="col-md-3">
                 <div class="offer-stage-column">
-                    <h4 class="text-white bg-offer-stage-green p-2 text-center">{{ stage }}</h4>
+                    <div class="text-white bg-offer-stage-green  text-center">
+                        <h4 >
+                            {{ stage }} 
+                        </h4>
+                    </div>
+                    <p>Number: {{ data.number_of_offers }} offers </p>
+                    <p>Total Value: {{ data.total_amount|floatformat:2|intcomma }} €</p>
                     <div class="offer-stage-list">
-                        {% for offer in offers %}
+                        {% for offer in data.offers %}
                         <div class="offer-stage-card mb-3 shadow-sm">
                             <div class="offer-stage-card-body">
                                 <h5 class="offer-stage-card-title">
-                                    <a href="{% url 'offers:offer_detail' offer.pk %}" class="text-decoration-none">{{ offer.offer_number }} - {{ offer.project_name }} </a> 
+                                    {% if offer.pk %}
+                                    <a href="{% url 'offers:offer_detail' offer.pk %}" class="text-decoration-none">{{ offer.offer_number }} - {{ offer.project_name }}</a>
+                                    {% else %}
+                                    <span class="text-danger">Missing PK for offer: {{ offer }}</span>
+                                    {% endif %}
                                 </h5>
                                 <p class="offer-stage-card-text">{{ offer.company.name }}</p>
                                 <p class="offer-stage-card-text">
@@ -32,10 +40,14 @@ Offer Stages
                                     {{ offer.project_country.name }} - {{ offer.offer_date|date:"M Y" }}
                                 </p>
                                 <p class="offer-stage-card-text">
-                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6"><strong><i class="fas fa-euro-sign"></i></strong> {{ offer.total_amount|floatformat:2|intcomma }} </span>
+                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6">
+                                        <strong><i class="fas fa-euro-sign"></i></strong> {{ offer.total_amount|floatformat:2|intcomma }}
+                                    </span>
                                 </p>
                                 <p class="offer-stage-card-text">
-                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6"><strong><i class="fas fa-box"></i></strong> {{ offer.category }} </span>
+                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6">
+                                        <strong><i class="fas fa-box"></i></strong> {{ offer.category }}
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -46,5 +58,4 @@ Offer Stages
             {% endfor %}
         </div>
     </div>
-</div>
 {% endblock %}
