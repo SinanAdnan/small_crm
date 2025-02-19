@@ -4,7 +4,6 @@ from company.models import Contact
 from products.models import Product, Category
 
 class OfferForm(forms.ModelForm):
-
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True, label='Category')
 
     class Meta:

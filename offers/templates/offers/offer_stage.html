@@ -21,8 +21,8 @@ Offer Stages
                             {{ stage }} 
                         </h4>
                     </div>
-                    <p>Number: {{ data.number_of_offers }} offers </p>
-                    <p>Total Value: {{ data.total_amount|floatformat:2|intcomma }} €</p>
+                    <p><i class="fas fa-layer-group"></i> {{ data.number_of_offers }}  </p>
+                    <p><i class="fas fa-money-bill-wave"></i> {{ data.total_amount|floatformat:2|intcomma }} €</p>
                     <div class="offer-stage-list">
                         {% for offer in data.offers %}
                         <div class="offer-stage-card mb-3 shadow-sm">

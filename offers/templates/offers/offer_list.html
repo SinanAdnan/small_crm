@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %}
     Offer List
 {% endblock %}
@@ -22,6 +22,7 @@
                         <th>Offer Number</th>
                         <th>Project Name</th>
                         <th>Company</th>
+                        <th>Total Value</th>
                         <th>Offer Date</th>
                         <th>Valid Until</th>
                         <th>Notes</th>
@@ -37,6 +38,9 @@
                             <td>
                                  {{ offer.company.name }}
                             </td>
+                            <td>
+                                {{ offer.total_amount |floatformat:2|intcomma }} €
+                           </td>
                             <td>{{ offer.offer_date }}</td>
                             <td>{{ offer.valid_until }}</td>
                             <td>{{ offer.notes }}</td>

@@ -1,127 +1,251 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 {% block content %}
-  <div class="container">
+<div class="container">
     <!-- Back Button -->
     <a href="{% url 'company:company_list' %}" class="btn btn-primary mt-3 mb-3">
-      <i class="fas fa-arrow-left"></i> Back to Companies
+        <i class="fas fa-arrow-left"></i> Back to Companies
     </a>
 
     <!-- Company Card -->
-    <div class="company-card">
-      <!-- Company Header -->
-      <div class="company-header">
-        <div>
-          <h2>
-            {{ company.name }}
-            
-            {% if company.classification == "High Value" %}
-              <span class="text-warning">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </span>
-            {% elif company.classification == "Medium Value" %}
-              <span class="text-warning">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <span class="text-secondary">
-                  <i class="far fa-star"></i>
-                </span>
-              </span>
-            {% elif company.classification == "Low Value" %}
-              <span class="text-warning">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </span>
-              <span class="text-secondary">
-                <i class="far fa-star"></i>
-                <i class="far fa-star"></i>
-              </span>
-            {% elif company.classification == "Unimportant" %}
-              <span class="text-warning">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </span>
-              <span class="text-secondary">
-                <i class="far fa-star"></i>
-                <i class="far fa-star"></i>
-                <i class="far fa-star"></i>
-              </span>
+    <div class="company-card mb-5">
+        <!-- Company Header -->
+        <div class="company-header d-flex justify-content-between align-items-center">
+            <div>
+                <h2>
+                    {{ company.name }}
+                    {% if company.classification == "High Value" %}
+                        <span class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                    {% elif company.classification == "Medium Value" %}
+                        <span class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="text-secondary">
+                                <i class="far fa-star"></i>
+                            </span>
+                        </span>
+                    {% elif company.classification == "Low Value" %}
+                        <span class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="text-secondary">
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                    {% elif company.classification == "Unimportant" %}
+                        <span class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="text-secondary">
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                    {% else %}
+                        <span class="text-muted">No Classification</span>
+                    {% endif %}
+                </h2>
+                {% if company.city and company.country %}
+                    <p>{{ company.city }}, <img src="https://flagcdn.com/w20/{{ company.country|lower }}.png" alt="{{ company.country }} Flag" class="img-fluid" style="width: 30px; height: 20px;"></p>
+                {% endif %}
+            </div>
+            {% if company.logo %}
+                <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="height: 80px; border-radius: 8px;">
             {% else %}
-              <span class="text-muted">No Classification</span>
+                <img src="{% static 'images/default_logo.png' %}" alt="Default Logo" style="height: 80px; border-radius: 8px;">
             {% endif %}
-          </h2>
-          {% if company.city and company.country %}
-            <p>{{ company.city }}, <img src="https://flagcdn.com/w20/{{ company.country|lower }}.png" alt="{{ company.country }} Flag" class="img-fluid" style="width: 30px; height: 20px;"></p>
-          {% endif %}
         </div>
-        {% if company.logo %}
-          <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="height: 80px; border-radius: 8px;">
-        {% else %}
-          <img src="{% static 'images/default_logo.png' %}" alt="Default Logo" style="height: 80px; border-radius: 8px;">
-        {% endif %}
-      </div>
 
-      <!-- Company Details -->
-      <div class="company-details">
-        <p><strong>Email:</strong> {{ company.email }}</p>
-        <p><strong>Phone:</strong> {{ company.phone }}</p>
-        {% if company.website %}
-          <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
-        {% endif %}
-        <p><strong>Address:</strong> {{ company.address }}</p>
-        <div class="company-description">
-          <p><strong>Description:</strong></p>
-          <p> {{ company.description }}</p>
+        <!-- Company Details -->
+        <div class="company-details">
+            <p><strong>Email:</strong> {{ company.email }}</p>
+            <p><strong>Phone:</strong> {{ company.phone }}</p>
+            {% if company.website %}
+                <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+            {% endif %}
+            <p><strong>Address:</strong> {{ company.address }}</p>
+            <div class="company-description">
+                <p><strong>Description:</strong></p>
+                <p>{{ company.description }}</p>
+            </div>
         </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="action-buttons">
-        <a href="{% url 'company:edit_company' company.id %}" class="btn btn-warning">
-          <i class="fas fa-edit"></i> Edit
-        </a>
-        <a href="{% url 'company:delete_company' company.id %}" class="btn btn-danger">
-          <i class="fas fa-trash"></i> Delete
-        </a>
-      </div>
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{% url 'company:edit_company' company.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'company:delete_company' company.id %}" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+        </div>
+    </div>
 
-      <!-- Contact Information Section -->
-      <div class="contact-info">
+    <!-- Contact Information Section -->
+    <div class="contact-info mb-5">
         <h3>Contact Information</h3>
         {% if company.contacts.all %}
-          <ul class="list-group">
-            {% for contact in company.contacts.all %}
-              <li class="list-group-item d-flex align-items-center">
-                <!-- Contact Image -->
-                {% if contact.image %}
-                  <img src="{{ contact.image.url }}" alt="{{ contact.first_name }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
-                {% else %}
-                  <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
-                {% endif %}
-                
-                <div>
-                  <!-- Contact Name as a Link -->
-                  <a href="{% url 'company:contact_detail' contact.id %}" class="fw-bold text-decoration-none">
-                    {{ contact.first_name }} {{ contact.second_name }}
-                  </a>
-                  <p class="mb-0 text-muted">{{ contact.position }}</p>
-                  <p class="mb-0"><i class="fas fa-envelope"></i> {{ contact.email }}</p>
-                </div>
-              </li>
-            {% endfor %}
-          </ul>
+            <ul class="list-group">
+                {% for contact in company.contacts.all %}
+                    <li class="list-group-item d-flex align-items-center">
+                        <!-- Contact Image -->
+                        {% if contact.image %}
+                            <img src="{{ contact.image.url }}" alt="{{ contact.first_name }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                        {% endif %}
+                        
+                        <div>
+                            <!-- Contact Name as a Link -->
+                            <a href="{% url 'company:contact_detail' contact.id %}" class="fw-bold text-decoration-none">
+                                {{ contact.first_name }} {{ contact.second_name }}
+                            </a>
+                            <p class="mb-0 text-muted">{{ contact.position }}</p>
+                            <p class="mb-0"><i class="fas fa-envelope"></i> {{ contact.email }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         {% else %}
-          <p>No contacts available.</p>
+            <p>No contacts available.</p>
         {% endif %}
-        <a href="{% url 'company:add_contact' company.id %}" class="btn btn-primary mt-3">Add Contact</a>
-      </div>
+        <a href="{% url 'company:add_contact' company.id %}" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Add Contact</a>
     </div>
-  </div>
+
+    <!-- Offers Section -->
+    <div class="offers-section mb-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Offers for {{ company.name }}</h4>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'offers:create' %}" class="btn btn-primary mb-3">
+                    <i class="fas fa-plus"></i> New Offer
+                </a>
+                <p><strong>Total Number of Offers:</strong> {{ total_offers }}</p>
+                <p><strong>Total Value of Offers:</strong> {{ total_amount|floatformat:2|intcomma }} €</p>
+                
+                {% if offers %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Offer Number</th>
+                                <th>Project Name</th>
+                                <th>Offer Date</th>
+                                <th>Valid Until</th>
+                                <th>Total Value</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for offer in offers %}
+                                <tr>
+                                    <td>{{ offer.offer_number }}</td>
+                                    <td><a href="{% url 'offers:offer_detail' offer.pk %}">{{ offer.project_name }}</a></td>
+                                    <td>{{ offer.offer_date }}</td>
+                                    <td>{{ offer.valid_until }}</td>
+                                    <td>{{ offer.get_total_value|floatformat:2|intcomma }} €</td>
+                                    <td>{{ offer.notes }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No offers available for this company.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Graph Section -->
+    <div class="graph-section">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Offer Value Graph for {{ company.name }}</h4>
+            </div>
+            <div class="card-body">
+                {% if offers %}
+                    <div class="mt-5">
+                        <canvas id="offerGraph" width="400" height="200"></canvas>
+                    </div>
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var ctx = document.getElementById('offerGraph').getContext('2d');
+
+                            var labels = [];
+                            var cumulativeData = [];
+                            var monthlyData = [];
+                            var performanceData = [];
+
+                            {% for item in cumulative_totals %}
+                                labels.push('{{ item.month }}');
+                                cumulativeData.push({{ item.total }});
+                            {% endfor %}
+
+                            {% for item in monthly_totals %}
+                                monthlyData.push({{ item.total }});
+                            {% endfor %}
+
+                            {% for change in performance_changes %}
+                                performanceData.push({{ change }});
+                            {% endfor %}
+
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        type: 'line',
+                                        label: 'Cumulative Offer Value',
+                                        data: cumulativeData,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1
+                                    }, {
+                                        type: 'bar',
+                                        label: 'Monthly Offer Value',
+                                        data: monthlyData,
+                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1
+                                    }, {
+                                        type: 'line',
+                                        label: 'Performance Change',
+                                        data: performanceData,
+                                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                        borderColor: 'rgba(255, 159, 64, 1)',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                {% else %}
+                    <p>No offers available for this company.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

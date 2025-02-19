@@ -94,3 +94,6 @@ class Offer(models.Model):
     @property
     def total_amount(self):
         return sum(product.total_price() for product in self.offer_products.all())
+    
+    def __str__(self):
+        return self.offer_number

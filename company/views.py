@@ -1,8 +1,14 @@
+from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Company, Contact
 from .forms import CompanyForm, ContactForm
+from offers.models import Offer
+from collections import defaultdict
+from django.db.models import Sum
+from datetime import date, timedelta
+import calendar
 
 # Utility function for redirection
 def redirect_to_company_list():
@@ -45,23 +51,64 @@ def company_list(request):
 def company_detail(request, pk):
     company = get_object_or_404(Company, pk=pk)
     contacts = company.contacts.all()
-    return render(request, 'company/company_detail.html', {'company': company, 'contacts': contacts})
+    offers = Offer.objects.filter(company=company).order_by('offer_date')
+
+    # Process offers by month for the last 12 months
+    today = date.today()
+    one_year_ago = today - timedelta(days=365)
+    offers = offers.filter(offer_date__gte=one_year_ago)
+
+    monthly_offers = defaultdict(Decimal)
+    for offer in offers:
+        month = offer.offer_date.strftime('%Y-%m')
+        monthly_offers[month] += offer.total_amount
+
+    # Create cumulative totals, monthly totals, and performance changes
+    cumulative_totals = []
+    monthly_totals = []
+    performance_changes = []
+    running_total = Decimal('0')
+    months = [(today - timedelta(days=30*i)).strftime('%Y-%m') for i in range(11, -1, -1)]
+    previous_total = Decimal('0')
+    for month in months:
+        running_total += monthly_offers[month]
+        cumulative_totals.append({
+            'month': calendar.month_name[int(month.split('-')[1])],
+            'total': float(running_total)
+        })
+        monthly_totals.append({
+            'month': calendar.month_name[int(month.split('-')[1])],
+            'total': float(monthly_offers[month])
+        })
+        performance_change = max(float(monthly_offers[month]) - float(previous_total), 0)
+        performance_changes.append(performance_change)
+        previous_total = monthly_offers[month]
+
+    total_amount = sum(offer.total_amount for offer in offers)
+    context = {
+        'company': company,
+        'contacts': contacts,
+        'offers': offers,
+        'total_amount': total_amount,
+        'total_offers': offers.count(),
+        'cumulative_totals': cumulative_totals,
+        'monthly_totals': monthly_totals,
+        'performance_changes': performance_changes
+    }
+    return render(request, 'company/company_detail.html', context)
 
 # Add Contact View
 def add_contact(request, company_id):
     company = get_object_or_404(Company, id=company_id)
-
     form = ContactForm()
 
     if request.method == 'POST':
-        form = ContactForm(request.POST, request.FILES)  # Include request.FILES to handle the file upload
+        form = ContactForm(request.POST, request.FILES)  # Include request.FILES to handle file upload
         if form.is_valid():
             contact = form.save(commit=False)
-            contact.company = Company.objects.get(id=company_id)  # Ensure the contact is linked to the correct company
+            contact.company = company
             contact.save()
             return redirect('company:company_detail', pk=company_id)  # Redirect after saving the form
-        else:
-            form = ContactForm()
 
     return render(request, 'company/add_contact.html', {'form': form, 'company': company})
 
@@ -70,7 +117,7 @@ def edit_contact(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
 
     if request.method == "POST":
-        form = ContactForm(request.POST, instance=contact)
+        form = ContactForm(request.POST, request.FILES, instance=contact)
         if form.is_valid():
             form.save()
             return redirect('company:company_detail', pk=contact.company.id)
@@ -122,9 +169,9 @@ def delete_company(request, pk):
         company.delete()
         return redirect_to_company_list()
 
-    return render(request, 'company/delete_company.html', {'company': company})
+    return render(request, 'company/confirm_delete_company.html', {'company': company})
 
-# Personnel view
+# Contact Detail View
 def contact_detail(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
     return render(request, 'company/contact_detail.html', {'contact': contact})

@@ -1,27 +1,166 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}
+    Add Product to Offer {{ offer.offer_number }}
+{% endblock %}
+
+{% block header %}
+    Add Product to Offer {{ offer.offer_number }} - {{ offer.project_name }}
+{% endblock %}
+
 {% block content %}
 <div class="container my-5">
     <h2 class="text-center mb-4 text-uppercase font-weight-bold">
         <i class="fas fa-plus"></i> Add Product to Offer {{ offer.offer_number }}
     </h2>
 
-    <div class="card shadow-lg border-0">
-        <div class="card-body">
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="id_product">Product</label>
-                    <select name="product" id="id_product" class="form-control" onchange="fetchProductData(this.value)">
-                        <option value="">Select a product</option>
-                        {% for product in form.fields.product.queryset %}
-                        <option value="{{ product.id }}">{{ product.name }}</option>
-                        {% endfor %}
-                    </select>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Product Details</h4>
                 </div>
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Add Product</button>
-            </form>
+                <div class="card-body">
+                    <form method="post" action="{% url 'offers:add_offer_product' offer.id %}">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="id_product">Product</label>
+                            <select name="product" id="id_product" class="form-control" onchange="fetchProductData(this.value)">
+                                <option value="">Select a product</option>
+                                {% for product in form.fields.product.queryset %}
+                                <option value="{{ product.id }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.product_code.label_tag }} 
+                            {{ form.product_code }}
+                            {% if form.product_code.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.product_code.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.product_name.label_tag }} 
+                            {{ form.product_name }}
+                            {% if form.product_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.product_name.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.size.label_tag }} 
+                            {{ form.size }}
+                            {% if form.size.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.size.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.material.label_tag }} 
+                            {{ form.material }}
+                            {% if form.material.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.material.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.unit_cost.label_tag }} 
+                            {{ form.unit_cost }}
+                            {% if form.unit_cost.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.unit_cost.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.margin.label_tag }} 
+                            {{ form.margin }}
+                            {% if form.margin.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.margin.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.price.label_tag }} 
+                            {{ form.price }}
+                            {% if form.price.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.price.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.discount_percentage.label_tag }} 
+                            {{ form.discount_percentage }}
+                            {% if form.discount_percentage.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.discount_percentage.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.description.label_tag }} 
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.description.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.quantity.label_tag }} 
+                            {{ form.quantity }}
+                            {% if form.quantity.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.quantity.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+                            <a href="{% url 'offers:offer_detail' offer.id %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
