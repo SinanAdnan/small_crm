@@ -1,4 +1,3 @@
-# products/models.py
 from django.db import models
 from math import ceil
 
@@ -29,7 +28,7 @@ class Product(models.Model):
             self.product_code = self.product_code.upper()
            
         # Calculate the price based on the unit cost and margin
-        self.price = ceil(self.unit_cost / (1 - (self.margin/100)))
+        self.price = ceil(self.unit_cost / (1 - (self.margin / 100)))
         super().save(*args, **kwargs)
 
     def __str__(self):

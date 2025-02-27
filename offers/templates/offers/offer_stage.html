@@ -10,52 +10,61 @@ Offer Stages
 {% endblock %}
 
 {% block content %}
-    <div class="container mt-5">
+    <div class="container-fluid mt-3">
         <h2 class="mb-4">Offer Stages</h2>
-        <div class="row">
-            {% for stage, data in offers_by_stage.items %}
-            <div class="col-md-3">
-                <div class="offer-stage-column">
-                    <div class="text-white bg-offer-stage-green  text-center">
-                        <h4 >
-                            {{ stage }} 
-                        </h4>
-                    </div>
-                    <p><i class="fas fa-layer-group"></i> {{ data.number_of_offers }}  </p>
-                    <p><i class="fas fa-money-bill-wave"></i> {{ data.total_amount|floatformat:2|intcomma }} €</p>
-                    <div class="offer-stage-list">
-                        {% for offer in data.offers %}
-                        <div class="offer-stage-card mb-3 shadow-sm">
-                            <div class="offer-stage-card-body">
-                                <h5 class="offer-stage-card-title">
-                                    {% if offer.pk %}
-                                    <a href="{% url 'offers:offer_detail' offer.pk %}" class="text-decoration-none">{{ offer.offer_number }} - {{ offer.project_name }}</a>
-                                    {% else %}
-                                    <span class="text-danger">Missing PK for offer: {{ offer }}</span>
-                                    {% endif %}
-                                </h5>
-                                <p class="offer-stage-card-text">{{ offer.company.name }}</p>
-                                <p class="offer-stage-card-text">
-                                    <img src="https://flagcdn.com/w20/{{ offer.project_country.code|lower }}.png" alt="{{ offer.project_country.name }} Flag" class="img-fluid" style="width: 20px; height: 15px;">
-                                    {{ offer.project_country.name }} - {{ offer.offer_date|date:"M Y" }}
-                                </p>
-                                <p class="offer-stage-card-text">
-                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6">
-                                        <strong><i class="fas fa-euro-sign"></i></strong> {{ offer.total_amount|floatformat:2|intcomma }}
-                                    </span>
-                                </p>
-                                <p class="offer-stage-card-text">
-                                    <span class="badge bg-success mb-1 px-3 py-2 fs-6">
-                                        <strong><i class="fas fa-box"></i></strong> {{ offer.category }}
-                                    </span>
-                                </p>
-                            </div>
+        <div class="row overflow-auto">
+            <div class="d-flex flex-nowrap">
+                {% for stage, data in offers_by_stage.items %}
+                <div class="col-md-3 flex-shrink-0">
+                    <div class="offer-stage-column ms-0 me-0">
+                        <div class="text-white bg-offer-stage-green text-center">
+                            <h4>
+                                {{ stage }} 
+                            </h4>
                         </div>
-                        {% endfor %}
+                        <p><i class="fas fa-layer-group"></i> {{ data.number_of_offers }}  </p>
+                        <p><i class="fas fa-money-bill-wave"></i> {{ data.total_amount|floatformat:2|intcomma }} €</p>
+                        <div class="offer-stage-list">
+                            {% for offer in data.offers %}
+                            <div class="offer-stage-card mb-3 shadow-sm">
+                                <div class="offer-stage-card-body">
+                                    <h5 class="offer-stage-card-title">
+                                        {% if offer.pk %}
+                                        <a href="{% url 'offers:offer_detail' offer.pk %}" class="text-decoration-none">{{ offer.offer_number }} - {{ offer.project_name }}</a>
+                                        {% else %}
+                                        <span class="text-danger">Missing PK for offer: {{ offer }}</span>
+                                        {% endif %}
+                                    </h5>
+                                    <p class="offer-stage-card-text">
+                                        {% if offer.company %}
+                                    <a href="{% url 'company:company_detail' offer.company.id %}">
+                                         {{ offer.company.name }}</a>
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </p>
+                                    <p class="offer-stage-card-text">
+                                        <img src="https://flagcdn.com/w20/{{ offer.project_country.code|lower }}.png" alt="{{ offer.project_country.name }} Flag" class="img-fluid" style="width: 20px; height: 15px;">
+                                        {{ offer.project_country.name }} - {{ offer.offer_date|date:"M Y" }}
+                                    </p>
+                                    <p class="offer-stage-card-text">
+                                        <span class="badge bg-success mb-1 px-3 py-2 fs-6">
+                                            <strong><i class="fas fa-euro-sign"></i></strong> {{ offer.total_amount|floatformat:2|intcomma }}
+                                        </span>
+                                    </p>
+                                    <p class="offer-stage-card-text">
+                                        <span class="badge bg-success mb-1 px-3 py-2 fs-6">
+                                            <strong><i class="fas fa-box"></i></strong> {{ offer.category }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 {% endblock %}

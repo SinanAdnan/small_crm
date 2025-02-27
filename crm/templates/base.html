@@ -13,31 +13,33 @@
 <body>
 
   <!-- Header -->
-  <div class="header d-flex justify-content-between align-items-center">
+  <div class="header d-flex justify-content-between align-items-center p-3">
     <div class="logo">
-      <a href="/"><img src="{% static 'images/crm_logo.png' %}" alt="CRM Logo"/></a>
+      <a href="/"><img src="{% static 'images/crm_logo.png' %}" alt="CRM Logo" class="img-fluid"/></a>
     </div>
     <h1>{% block header %}Dashboard{% endblock %}</h1>
-    <div class="user-profile">
+    <div class="user-profile d-flex align-items-center">
       <span class="me-2">Welcome, User</span>
-      <img src="{% static 'images/user-profile.png' %}" alt="User Profile">
+      <img src="{% static 'images/user-profile.png' %}" alt="User Profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px;">
     </div>
   </div>
 
   <!-- Sidebar -->
-  <div class="sidebar">
-    <a href="/">Home</a>
-    <a href="/companies/">Company List</a>
-    <a href="/products/">Products</a>
-    <a href="/offers/">Offers</a>
-    <a href="/reports/">Reports</a>
-    <a href="/settings/">Settings</a>
-    <a href="/logout/">Logout</a>
-  </div>
+  <div class="d-flex">
+    <div class="sidebar bg-dark text-white p-3" style="min-width: 200px;">
+      <a href="/" class="text-white text-decoration-none d-block mb-2">Home</a>
+      <a href="/companies/" class="text-white text-decoration-none d-block mb-2">Company List</a>
+      <a href="/products/" class="text-white text-decoration-none d-block mb-2">Products</a>
+      <a href="/offers/" class="text-white text-decoration-none d-block mb-2">Offers</a>
+      <a href="/reports/" class="text-white text-decoration-none d-block mb-2">Reports</a>
+      <a href="/settings/" class="text-white text-decoration-none d-block mb-2">Settings</a>
+      <a href="/logout/" class="text-white text-decoration-none d-block mb-2">Logout</a>
+    </div>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    {% block content %}{% endblock %}
+    <!-- Main Content -->
+    <div class="main-content flex-grow-1 p-3">
+      {% block content %}{% endblock %}
+    </div>
   </div>
 
   <!-- Footer -->
@@ -49,6 +51,38 @@
   </footer>
   {% block extra_js %}{% endblock %}
 
+  <!-- Ensure jQuery is included before Bootstrap and other scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    console.log('jQuery loaded:', typeof $ !== 'undefined');
+    $(document).ready(function() {
+        
+        $("#stage-table tbody").sortable({
+            update: function(event, ui) {
+                var order = $(this).sortable('toArray', { attribute: 'data-id' });
+                $.ajax({
+                    url: "{% url 'offers:update_stage_order' %}",
+                    method: "POST",
+                    data: {
+                        order: order,
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Stage order updated successfully.');
+                        } else {
+                            alert('Failed to update stage order.');
+                        }
+                    },
+                    error: function(response) {
+                        alert('Error occurred while updating stage order.');
+                    }
+                });
+            }
+        }).disableSelection();
+    });
+</script>
 </body>
 </html>

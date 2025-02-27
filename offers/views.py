@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Offer, OfferCounter, DeliveryMethod, Stage, OfferProduct
-from company.models import Contact
-from .forms import OfferForm, InitializeCounterForm, DeliveryMethodForm, StageForm, OfferProductForm
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import Offer, OfferCounter, DeliveryMethod, Stage, OfferProduct
+from company.models import Contact, Company
+from .forms import OfferForm, InitializeCounterForm, DeliveryMethodForm, StageForm, OfferProductForm
+from django.contrib import messages
 
 def initialize_counter(request):
     if request.method == 'POST':
@@ -13,19 +15,28 @@ def initialize_counter(request):
             counter.base_number = initial_number
             counter.current_number = initial_number
             counter.save()
+            messages.success(request, 'Counter initialized successfully.')
             return redirect('offers:list')
     else:
         form = InitializeCounterForm()
     return render(request, 'offers/initialize_counter.html', {'form': form})
 
 def create_offer(request):
+    company_id = request.GET.get('company_id')
+    initial_data = {}
+    if company_id:
+        company = get_object_or_404(Company, pk=company_id)
+        initial_data['company'] = company
+
     if request.method == 'POST':
         form = OfferForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('offers:list')
+            offer = form.save()
+            messages.success(request, 'Offer created successfully.')
+            return redirect('offers:offer_detail', pk=offer.pk)
     else:
-        form = OfferForm()
+        form = OfferForm(initial=initial_data)
+        
     return render(request, 'offers/create_offer.html', {'form': form})
 
 def offer_list(request):
@@ -52,13 +63,14 @@ def create_delivery_method(request):
         form = DeliveryMethodForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Delivery method created successfully.')
             return redirect('offers:delivery_method_list')
     else:
         form = DeliveryMethodForm()
     return render(request, 'offers/create_delivery_method.html', {'form': form})
 
 def stage_list(request):
-    stages = Stage.objects.all()
+    stages = Stage.objects.all().order_by('order')
     return render(request, 'offers/stage_list.html', {'stages': stages})
 
 def create_stage(request):
@@ -66,6 +78,7 @@ def create_stage(request):
         form = StageForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Stage created successfully.')
             return redirect('offers:stage_list')
     else:
         form = StageForm()
@@ -77,6 +90,7 @@ def edit_stage(request, pk):
         form = StageForm(request.POST, instance=stage)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Stage updated successfully.')
             return redirect('offers:stage_list')
     else:
         form = StageForm(instance=stage)
@@ -86,11 +100,12 @@ def delete_stage(request, pk):
     stage = get_object_or_404(Stage, pk=pk)
     if request.method == 'POST':
         stage.delete()
+        messages.success(request, 'Stage deleted successfully.')
         return redirect('offers:stage_list')
     return render(request, 'offers/delete_stage.html', {'stage': stage})
 
 def offer_stage(request):
-    stages = Stage.objects.all()
+    stages = Stage.objects.all().order_by('order')
     if not stages.exists():
         stages = ['Offers']
     
@@ -115,6 +130,7 @@ def add_offer_product(request, offer_id):
             offer_product = form.save(commit=False)
             offer_product.offer = offer
             offer_product.save()
+            messages.success(request, 'Offer product added successfully.')
             return redirect('offers:offer_detail', pk=offer.pk)
     else:
         product_id = request.GET.get('product_id')
@@ -128,6 +144,7 @@ def edit_offer_product(request, offer_id, offer_product_id):
         form = OfferProductForm(request.POST, instance=offer_product)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Offer product updated successfully.')
             return redirect('offers:offer_detail', pk=offer.pk)
     else:
         form = OfferProductForm(instance=offer_product)
@@ -138,6 +155,7 @@ def delete_offer_product(request, offer_id, offer_product_id):
     offer_product = get_object_or_404(OfferProduct, pk=offer_product_id)
     if request.method == 'POST':
         offer_product.delete()
+        messages.success(request, 'Offer product deleted successfully.')
         return redirect('offers:offer_detail', pk=offer.pk)
     return render(request, 'offers/delete_offer_product.html', {'offer_product': offer_product, 'offer': offer})
 
@@ -147,7 +165,10 @@ def edit_offer(request, pk):
         form = OfferForm(request.POST, instance=offer)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Offer updated successfully.')
             return redirect('offers:offer_detail', pk=pk)
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = OfferForm(instance=offer)
     return render(request, 'offers/edit_offer.html', {'form': form, 'offer': offer})
@@ -156,5 +177,17 @@ def delete_offer(request, pk):
     offer = get_object_or_404(Offer, pk=pk)
     if request.method == 'POST':
         offer.delete()
+        messages.success(request, 'Offer deleted successfully.')
         return redirect('offers:list')
     return render(request, 'offers/delete_offer.html', {'offer': offer})
+
+@csrf_exempt
+def update_stage_order(request):
+    if request.method == 'POST':
+        order = request.POST.getlist('order[]')
+        for index, stage_id in enumerate(order):
+            stage = Stage.objects.get(pk=stage_id)
+            stage.order = index
+            stage.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'fail'}, status=400)

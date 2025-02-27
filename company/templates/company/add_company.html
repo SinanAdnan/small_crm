@@ -65,16 +65,31 @@
                 <label for="{{ form.website.id_for_label }}">Website</label>
                 {{ form.website }}
             </div>
-            <!--Classification-->
+
+            <!-- Classification -->
             <div class="form-group">
-                <label for="id_classification">Classification</label>
-                <select name="classification" id="id_classification" class="form-control">
-                    <option value="High Value" {% if company.classification == "High Value" %}selected{% endif %}>High Value</option>
-                    <option value="Medium Value" {% if company.classification == "Medium Value" %}selected{% endif %}>Medium Value</option>
-                    <option value="Low Value" {% if company.classification == "Low Value" %}selected{% endif %}>Low Value</option>
-                    <option value="Unimportant" {% if company.classification == "Unimportant" %}selected{% endif %}>Unimportant</option>
-                </select>
+                <label for="{{ form.classification.id_for_label }}">Classification</label>
+                {{ form.classification }}
             </div>
+
+            <!-- Yearly Target -->
+            <div class="form-group">
+                <label for="{{ form.yearly_target.id_for_label }}">Yearly Target</label>
+                {{ form.yearly_target }}
+            </div>
+
+            <!-- Active Line -->
+            <div class="form-group">
+                <label for="{{ form.active_line.id_for_label }}">Active Line</label>
+                {{ form.active_line }}
+            </div>
+
+            <!-- Poor Line -->
+            <div class="form-group">
+                <label for="{{ form.poor_line.id_for_label }}">Poor Line</label>
+                {{ form.poor_line }}
+            </div>
+
             <button type="submit" class="btn btn-primary">Save Company</button>
         </form>
     </div>

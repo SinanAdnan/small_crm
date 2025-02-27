@@ -5,7 +5,7 @@ class CompanyForm(forms.ModelForm):
     
     class Meta:
         model = Company
-        fields = ['name', 'logo', 'description', 'address', 'city', 'country', 'phone', 'email', 'website', 'classification']
+        fields = ['name', 'logo', 'description', 'address', 'city', 'country', 'phone', 'email', 'website', 'classification', 'yearly_target', 'active_line', 'poor_line']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name'}),
             'logo': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
@@ -16,15 +16,16 @@ class CompanyForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Website URL'}),
-            
+            'yearly_target': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Yearly Target'}),
+            'active_line': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Active Line'}),
+            'poor_line': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Poor Line'}),
         }
+
 class ContactForm(forms.ModelForm):
     
     class Meta:
         model = Contact
-        fields = ['first_name', 'second_name', 'position', 'country', 'phone', 'email' , 'image' ,
-            'linkedin_profile', 'preferred_communication', 'behavior',
-             'additional_info']
+        fields = ['first_name', 'second_name', 'position', 'country', 'phone', 'email', 'image', 'linkedin_profile', 'preferred_communication', 'behavior', 'additional_info']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             'second_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Second Name'}),

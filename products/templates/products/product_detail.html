@@ -42,7 +42,6 @@
                             <span class="badge bg-danger mb-1 px-5 py-1 fs-6"><strong>Cost:</strong> {{ product.unit_cost|floatformat:2|intcomma }} €</span>
                             <span class="badge bg-success mb-1 px-5 py-1 fs-6"><strong>Price:</strong> {{ product.price|floatformat:2|intcomma }} €</span>
                             <span class="badge bg-primary mb-1 px-5 py-1 fs-6"><strong>Margin:</strong> {{ product.margin|floatformat:2 }} %</span>
-                            
                         </div>
                     </div>
 
@@ -63,6 +62,29 @@
         </div>
     </div>
 
+    <!-- Graph Section -->
+    <div class="mt-5">
+        <h4 class="text-center">Product Offer Statistics</h4>
+        <div class="text-center mb-3">
+            <label><input type="checkbox" id="filter-countries" checked> Countries</label>
+            <label><input type="checkbox" id="filter-companies"> Companies</label>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" class="form-control" value="{{ start_date|default:now|date:'Y-m-d' }}">
+            </div>
+            <div class="col-md-4">
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" class="form-control" value="{{ end_date|default:now|date:'Y-m-d' }}">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button id="filter-btn" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+        <canvas id="offerChart" width="400" height="200"></canvas>
+    </div>
+
     <!-- Action Buttons -->
     <div class="text-center mt-4">
         <a href="{% url 'products:product_list' %}" class="btn btn-secondary px-4">
@@ -76,4 +98,85 @@
         </a>
     </div>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var ctx = document.getElementById('offerChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Number of Offered Units',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function updateChart(filter, start_date, end_date) {
+            $.ajax({
+                url: "{% url 'products:product_offer_data' product.id %}",
+                data: {
+                    start_date: start_date,
+                    end_date: end_date
+                },
+                success: function(data) {
+                    chart.data.labels = [];
+                    chart.data.datasets[0].data = [];
+
+                    if (filter === 'countries') {
+                        for (var country in data.countries) {
+                            chart.data.labels.push(country);
+                            chart.data.datasets[0].data.push(data.countries[country]);
+                        }
+                    } else if (filter === 'companies') {
+                        for (var company in data.companies) {
+                            chart.data.labels.push(company);
+                            chart.data.datasets[0].data.push(data.companies[company]);
+                        }
+                    }
+
+                    chart.update();
+                }
+            });
+        }
+
+        $('#filter-countries').change(function() {
+            if ($(this).is(':checked')) {
+                $('#filter-companies').prop('checked', false);
+                updateChart('countries', $('#start_date').val(), $('#end_date').val());
+            }
+        });
+
+        $('#filter-companies').change(function() {
+            if ($(this).is(':checked')) {
+                $('#filter-countries').prop('checked', false);
+                updateChart('companies', $('#start_date').val(), $('#end_date').val());
+            }
+        });
+
+        $('#filter-btn').click(function() {
+            var filter = $('#filter-countries').is(':checked') ? 'countries' : 'companies';
+            updateChart(filter, $('#start_date').val(), $('#end_date').val());
+        });
+
+        // Initial chart load
+        updateChart('countries', $('#start_date').val(), $('#end_date').val());
+    });
+</script>
 {% endblock %}

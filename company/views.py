@@ -53,10 +53,18 @@ def company_detail(request, pk):
     contacts = company.contacts.all()
     offers = Offer.objects.filter(company=company).order_by('offer_date')
 
-    # Process offers by month for the last 12 months
-    today = date.today()
-    one_year_ago = today - timedelta(days=365)
-    offers = offers.filter(offer_date__gte=one_year_ago)
+    # Retrieve the selected time period from the request
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    
+    if start_date and end_date:
+        start_date = date.fromisoformat(start_date)
+        end_date = date.fromisoformat(end_date)
+    else:
+        end_date = date.today()
+        start_date = end_date - timedelta(days=365)  # Default to last 12 months
+
+    offers = offers.filter(offer_date__gte=start_date, offer_date__lte=end_date)
 
     monthly_offers = defaultdict(Decimal)
     for offer in offers:
@@ -68,7 +76,7 @@ def company_detail(request, pk):
     monthly_totals = []
     performance_changes = []
     running_total = Decimal('0')
-    months = [(today - timedelta(days=30*i)).strftime('%Y-%m') for i in range(11, -1, -1)]
+    months = [(start_date + timedelta(days=30*i)).strftime('%Y-%m') for i in range((end_date - start_date).days // 30 + 1)]
     previous_total = Decimal('0')
     for month in months:
         running_total += monthly_offers[month]
@@ -85,6 +93,10 @@ def company_detail(request, pk):
         previous_total = monthly_offers[month]
 
     total_amount = sum(offer.total_amount for offer in offers)
+    monthly_target = float(company.yearly_target) / 12
+    monthly_active_line = float(company.active_line) / 12
+    monthly_poor_line = float(company.poor_line) / 12
+
     context = {
         'company': company,
         'contacts': contacts,
@@ -93,7 +105,12 @@ def company_detail(request, pk):
         'total_offers': offers.count(),
         'cumulative_totals': cumulative_totals,
         'monthly_totals': monthly_totals,
-        'performance_changes': performance_changes
+        'performance_changes': performance_changes,
+        'monthly_target': monthly_target,
+        'monthly_active_line': monthly_active_line,
+        'monthly_poor_line': monthly_poor_line,
+        'start_date': start_date,
+        'end_date': end_date
     }
     return render(request, 'company/company_detail.html', context)
 
@@ -156,7 +173,7 @@ def edit_company(request, pk):
         form = CompanyForm(request.POST, request.FILES, instance=company)
         if form.is_valid():
             form.save()
-            return redirect_to_company_list()
+            return redirect('company:company_detail', pk=company.pk)
 
     form = CompanyForm(instance=company)
     return render(request, 'company/edit_company.html', {'form': form, 'company': company})

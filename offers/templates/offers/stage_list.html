@@ -12,16 +12,16 @@
     <div class="container mt-5">
         <h2 class="mb-4">Stage List</h2>
         <a href="{% url 'offers:create_stage' %}" class="btn btn-primary mb-3">Add Stage</a>
-        <table class="table">
+        <table class="table" id="stage-table">
             <thead>
                 <tr>
                     <th>Stage Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="sortable">
                 {% for stage in stages %}
-                <tr>
+                <tr data-id="{{ stage.pk }}" class="draggable-row">
                     <td>{{ stage.name }}</td>
                     <td>
                         <a href="{% url 'offers:edit_stage' stage.pk %}" class="btn btn-warning btn-sm">Edit</a>
@@ -32,4 +32,47 @@
             </tbody>
         </table>
     </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        console.log('Document ready');
+        var $tbody = $("#sortable");
+        console.log('Sortable tbody exists:', $tbody.length > 0);
+        
+        $tbody.sortable({
+            items: "tr",
+            cursor: "move",
+            opacity: 0.7,
+            update: function(event, ui) {
+                console.log('Sortable update triggered');
+                var order = $(this).sortable('toArray', { attribute: 'data-id' });
+                console.log('New order:', order);
+                
+                $.ajax({
+                    url: "{% url 'offers:update_stage_order' %}",
+                    method: "POST",
+                    data: {
+                        order: order,
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    },
+                    success: function(response) {
+                        console.log('AJAX response:', response);
+                        if (response.status === 'success') {
+                            console.log('Stage order updated successfully.');
+                        } else {
+                            console.log('Failed to update stage order.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX error:', status, error);
+                    }
+                });
+            }
+        }).disableSelection();
+        
+        console.log('Sortable initialized:', $tbody.hasClass('ui-sortable'));
+    });
+</script>
 {% endblock %}

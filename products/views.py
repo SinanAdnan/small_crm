@@ -1,10 +1,14 @@
-# products/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category
 from .forms import ProductForm, CategoryForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
+from offers.models import OfferProduct
+from django.utils.dateparse import parse_date
+from datetime import datetime, timedelta
+
 
 def product_list(request):
     products = Product.objects.all()  # Get all products
@@ -50,18 +54,22 @@ def product_list(request):
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    return render(request, 'products/product_detail.html', {'product': product})
+    now = datetime.now().strftime('%Y-%m-%d')
+
+    context = {
+        'product': product,
+        'now': now
+    }
+
+    return render(request, 'products/product_detail.html', context)
 
 def product_create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)  # Save but don't commit to the database yet
-            
-            # Ensure product_code is uppercase (redundant, but keeps code cleaner)
-            product.product_code = product.product_code.upper()
-            
             product.save()  # Now save to the database
+            messages.success(request, 'Product created successfully!')
             return redirect('products:product_list')
     else:
         form = ProductForm()
@@ -74,60 +82,59 @@ def product_edit(request, pk):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('products:product_detail', pk=product.pk)  
-        else:
-            print(form.errors)  # Debugging: print errors to console
+            messages.success(request, 'Product updated successfully!')
+            return redirect('products:product_detail', pk=product.pk)
     else:
         form = ProductForm(instance=product)
+    
     return render(request, 'products/product_form.html', {'form': form, 'product': product})
 
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
         product.delete()
+        messages.success(request, 'Product deleted successfully!')
         return redirect('products:product_list')
+    
     return render(request, 'products/product_delete.html', {'product': product})
 
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'products/category_list.html', {'categories': categories})
 
-# View to add a new category
 def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('products:category_list')  # Redirect to category list after adding
+            messages.success(request, 'Category added successfully!')
+            return redirect('products:category_list')
     else:
         form = CategoryForm()
     
     return render(request, 'products/add_category.html', {'form': form})
 
-# Edit an existing category
 def edit_category(request, pk):
-     category = get_object_or_404(Category, pk=pk)
-     if request.method == 'POST':
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
             messages.success(request, 'Category updated successfully!')
             return redirect('products:category_list')
-     else:
+    else:
         form = CategoryForm(instance=category)
-     return render(request, 'products/category_form.html', {'form': form, 'title': 'Edit Category'})
+    
+    return render(request, 'products/category_form.html', {'form': form, 'title': 'Edit Category'})
 
-# Delete a category
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
         category.delete()
         messages.success(request, 'Category deleted successfully!')
         return redirect('products:category_list')
+    
     return render(request, 'products/category_confirm_delete.html', {'category': category})
-
-from django.http import JsonResponse
-from .models import Product
 
 def product_detail_api(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -142,3 +149,42 @@ def product_detail_api(request, product_id):
         'description': product.description,
     }
     return JsonResponse(data)
+
+def product_offer_data(request, product_id):
+    offers = OfferProduct.objects.filter(product_id=product_id)
+
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    if start_date:
+        start_date = parse_date(start_date)
+    else:
+        start_date = datetime.now() - timedelta(days=365)
+    
+    if end_date:
+        end_date = parse_date(end_date)
+    else:
+        end_date = datetime.now()
+
+    offers = offers.filter(offer__offer_date__range=(start_date, end_date))
+
+    country_data = {}
+    company_data = {}
+
+    for offer in offers:
+        country = offer.offer.project_country.name
+        company = offer.offer.company.name
+        quantity = offer.quantity
+
+        if country not in country_data:
+            country_data[country] = 0
+        country_data[country] += quantity
+
+        if company not in company_data:
+            company_data[company] = 0
+        company_data[company] += quantity
+
+    return JsonResponse({
+        'countries': country_data,
+        'companies': company_data,
+    })

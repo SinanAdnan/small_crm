@@ -25,7 +25,7 @@
                         <th>Total Value</th>
                         <th>Offer Date</th>
                         <th>Valid Until</th>
-                        <th>Notes</th>
+                        <th>Stage</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,14 +36,19 @@
                                 <i class="fas fa-file-invoice-dollar"></i> {{ offer.project_name }}</a>
                             </td>
                             <td>
-                                 {{ offer.company.name }}
+                                {% if offer.company %}
+                                    <a href="{% url 'company:company_detail' offer.company.id %}">
+                                         {{ offer.company.name }}</a>
+                                {% else %}
+                                    N/A
+                                {% endif %}
                             </td>
                             <td>
                                 {{ offer.total_amount |floatformat:2|intcomma }} €
                            </td>
                             <td>{{ offer.offer_date }}</td>
                             <td>{{ offer.valid_until }}</td>
-                            <td>{{ offer.notes }}</td>
+                            <td>{{ offer.stage }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

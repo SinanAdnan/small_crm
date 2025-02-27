@@ -116,7 +116,6 @@ a:hover {
    ============================== */
 .main-content {
     margin-left: 250px;
-    padding: 20px;
     flex-grow: 1;
 }
 
@@ -339,6 +338,24 @@ a:hover {
 
 .footer a:hover {
     text-decoration: underline;
+}
+/* ==============================
+   Stage list Design
+   ============================== */
+
+.draggable-row {
+    cursor: move;
+}
+
+.draggable-row:hover {
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ui-sortable-placeholder {
+    background-color: #d1ecf1;
+    visibility: visible !important;
+    height: 40px; /* Adjust as needed */
 }
 
 /* ==============================

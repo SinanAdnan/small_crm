@@ -131,7 +131,7 @@
                 <h4 class="mb-0">Offers for {{ company.name }}</h4>
             </div>
             <div class="card-body">
-                <a href="{% url 'offers:create' %}" class="btn btn-primary mb-3">
+                <a href="{% url 'offers:create' %}?company_id={{ company.id }}" class="btn btn-primary mb-3">
                     <i class="fas fa-plus"></i> New Offer
                 </a>
                 <p><strong>Total Number of Offers:</strong> {{ total_offers }}</p>
@@ -146,7 +146,7 @@
                                 <th>Offer Date</th>
                                 <th>Valid Until</th>
                                 <th>Total Value</th>
-                                <th>Notes</th>
+                                <th>Stage</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -156,8 +156,8 @@
                                     <td><a href="{% url 'offers:offer_detail' offer.pk %}">{{ offer.project_name }}</a></td>
                                     <td>{{ offer.offer_date }}</td>
                                     <td>{{ offer.valid_until }}</td>
-                                    <td>{{ offer.get_total_value|floatformat:2|intcomma }} €</td>
-                                    <td>{{ offer.notes }}</td>
+                                    <td>{{ offer.total_amount|floatformat:2|intcomma }} €</td>
+                                    <td>{{ offer.stage }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -176,6 +176,19 @@
                 <h4 class="mb-0">Offer Value Graph for {{ company.name }}</h4>
             </div>
             <div class="card-body">
+                <!-- Date Range Filter -->
+                <form method="get" class="form-inline mb-4">
+                    <div class="form-group mr-2">
+                        <label for="start_date" class="mr-2">Start Date</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" value="{{ start_date }}">
+                    </div>
+                    <div class="form-group mr-2">
+                        <label for="end_date" class="mr-2">End Date</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" value="{{ end_date }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
+
                 {% if offers %}
                     <div class="mt-5">
                         <canvas id="offerGraph" width="400" height="200"></canvas>
@@ -190,10 +203,16 @@
                             var cumulativeData = [];
                             var monthlyData = [];
                             var performanceData = [];
+                            var targetData = [];
+                            var activeData = [];
+                            var poorData = [];
 
                             {% for item in cumulative_totals %}
                                 labels.push('{{ item.month }}');
-                                cumulativeData.push({{ item.total }});
+                                cumulativeData.push({{ item.total }}/12);
+                                targetData.push({{ monthly_target }});
+                                activeData.push({{ monthly_active_line }});
+                                poorData.push({{ monthly_poor_line }});
                             {% endfor %}
 
                             {% for item in monthly_totals %}
@@ -214,7 +233,7 @@
                                         data: cumulativeData,
                                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                         borderColor: 'rgba(75, 192, 192, 1)',
-                                        borderWidth: 1
+                                        borderWidth: 2
                                     }, {
                                         type: 'bar',
                                         label: 'Monthly Offer Value',
@@ -229,6 +248,30 @@
                                         backgroundColor: 'rgba(255, 159, 64, 0.2)',
                                         borderColor: 'rgba(255, 159, 64, 1)',
                                         borderWidth: 1
+                                    }, {
+                                        type: 'line',
+                                        label: 'Yearly Target',
+                                        data: targetData,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                        borderColor: 'rgb(0, 17, 255)',
+                                        borderWidth: 1,
+                                        
+                                    }, {
+                                        type: 'line',
+                                        label: 'Active Line',
+                                        data: activeData,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgb(51, 255, 0)',
+                                        borderWidth: 1,
+                                        borderDash: [10, 5]
+                                    }, {
+                                        type: 'line',
+                                        label: 'Poor Line',
+                                        data: poorData,
+                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                        borderColor: 'rgb(223, 0, 48)',
+                                        borderWidth: 1,
+                                        borderDash: [10, 5]
                                     }]
                                 },
                                 options: {

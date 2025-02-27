@@ -15,6 +15,7 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary">Create Offer</button>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back();">Cancel</button>
         </form>
     </div>
 {% endblock %}
@@ -23,9 +24,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#id_company').change(function () {
+        function loadContacts() {
             var url = "{% url 'offers:load_contacts' %}";
-            var companyId = $(this).val();
+            var companyId = $('#id_company').val();
             $.ajax({
                 url: url,
                 data: {
@@ -38,7 +39,14 @@
                     });
                 }
             });
-        });
+        }
+
+        $('#id_company').change(loadContacts);
+
+        // Trigger change event if company is pre-selected
+        if ($('#id_company').val()) {
+            loadContacts();
+        }
     });
 </script>
 {% endblock %}

@@ -24,9 +24,24 @@ class OfferCounter(models.Model):
 
 class Stage(models.Model):
     name = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
+
+    def previous_stage(self):
+        previous_stages = Stage.objects.filter(pk__lt=self.pk).order_by('-pk')
+        if previous_stages.exists():
+            return previous_stages.first()
+        return None
+
+    def delete(self, *args, **kwargs):
+        previous_stage = self.previous_stage()
+        if previous_stage:
+            Offer.objects.filter(stage=self).update(stage=previous_stage)
+        else:
+            Offer.objects.filter(stage=self).update(stage=None)
+        super().delete(*args, **kwargs)
 
 class OfferProduct(models.Model):
     offer = models.ForeignKey('Offer', on_delete=models.CASCADE, related_name='offer_products')
@@ -94,6 +109,3 @@ class Offer(models.Model):
     @property
     def total_amount(self):
         return sum(product.total_price() for product in self.offer_products.all())
-    
-    def __str__(self):
-        return self.offer_number

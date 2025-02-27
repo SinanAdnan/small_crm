@@ -24,6 +24,9 @@ class Company(models.Model):
         choices=CLASSIFICATION_CHOICES,
         default='Unimportant'
     )
+    yearly_target = models.DecimalField(max_digits=10, decimal_places=2, default=1200000)
+    active_line = models.DecimalField(max_digits=10, decimal_places=2, default=1560000)  # 30% more than target
+    poor_line = models.DecimalField(max_digits=10, decimal_places=2, default=720000)  # 40% less than target
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
